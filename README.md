@@ -32,121 +32,7 @@ read_counts = pd.read_excel(supp_reads,
                             names = ['sgRNA Sequence', 'pDNA', 'A375_RepA', 'A375_RepB'])
 guide_annotations = pd.read_excel(supp_reads,
                                   sheet_name='sgRNA annotations')
-
-read_counts
 ```
-
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>sgRNA Sequence</th>
-      <th>pDNA</th>
-      <th>A375_RepA</th>
-      <th>A375_RepB</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>AAAAAAAATCCGGACAATGG</td>
-      <td>522</td>
-      <td>729</td>
-      <td>774</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>AAAAAAAGGATGGTGATCAA</td>
-      <td>511</td>
-      <td>1484</td>
-      <td>1393</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>AAAAAAATGACATTACTGCA</td>
-      <td>467</td>
-      <td>375</td>
-      <td>603</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>AAAAAAATGTCAGTCGAGTG</td>
-      <td>200</td>
-      <td>737</td>
-      <td>506</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>AAAAAACACAAGCAAGACCG</td>
-      <td>286</td>
-      <td>672</td>
-      <td>352</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>77436</th>
-      <td>TTTGTTTGGATTGCTTCAAG</td>
-      <td>514</td>
-      <td>2878</td>
-      <td>303</td>
-    </tr>
-    <tr>
-      <th>77437</th>
-      <td>TTTTACCTTGTTCACATGGA</td>
-      <td>828</td>
-      <td>3896</td>
-      <td>3367</td>
-    </tr>
-    <tr>
-      <th>77438</th>
-      <td>TTTTGACTCTAATCACCGGT</td>
-      <td>588</td>
-      <td>2725</td>
-      <td>2498</td>
-    </tr>
-    <tr>
-      <th>77439</th>
-      <td>TTTTTAATACAAGGTAATCT</td>
-      <td>503</td>
-      <td>2209</td>
-      <td>1785</td>
-    </tr>
-    <tr>
-      <th>77440</th>
-      <td>TTTTTCTCACCCGATGAATC</td>
-      <td>661</td>
-      <td>3198</td>
-      <td>3189</td>
-    </tr>
-  </tbody>
-</table>
-<p>77441 rows × 4 columns</p>
-</div>
-
-
 
 ```python
 lognorms = pool.lognorm_columns(reads_df=read_counts, columns=['pDNA', 'A375_RepA', 'A375_RepB'])
@@ -204,42 +90,8 @@ ess_genes = pd.read_table(ess_file, names=['gene', 'gene_id'])
 ```python
 roc_aucs = pool.get_roc_aucs(lfcs=gene_lfcs, tp_genes=ess_genes.gene, fp_genes=noness_genes.gene, gene_col='Annotated Gene Symbol')
 assert roc_aucs['ROC-AUC'][0] > 0.9
-roc_aucs
+print('ROC-AUC: ' + str(round(roc_aucs['ROC-AUC'].values[0], 3)))
 ```
 
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>condition</th>
-      <th>ROC-AUC</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>A375</td>
-      <td>0.976469</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
+    ROC-AUC: 0.976
 
