@@ -50,7 +50,7 @@ nb_path: "00_core.ipynb"
 </blockquote>
 <p>Standardize read counts by calculating reads per million,
 adding a pseudo-count of one, and taking the log2</p>
-<p>reads: numpy or pandas array
+<p>reads: numpy or pandas array |
 returns: numpy or pandas array</p>
 
 </div>
@@ -77,8 +77,8 @@ returns: numpy or pandas array</p>
 <h4 id="lognorm_columns" class="doc_header"><code>lognorm_columns</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L22" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>lognorm_columns</code>(<strong><code>reads_df</code></strong>, <strong><code>columns</code></strong>)</p>
 </blockquote>
 <p>Calculate lognorms for specified columns</p>
-<p>reads_df: dataframe
-columns: list
+<p>reads_df: dataframe |
+columns: list |
 returns: lognorm dataframe</p>
 
 </div>
@@ -377,10 +377,10 @@ returns: lognorm dataframe</p>
 <h4 id="filter_pdna" class="doc_header"><code>filter_pdna</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L35" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>filter_pdna</code>(<strong><code>lognorm_df</code></strong>, <strong><code>pdna_cols</code></strong>, <strong><code>z_low</code></strong>=<em><code>-3</code></em>, <strong><code>z_high</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Filter the lognorm dataframe based on the z_scored lognorms of pDNA</p>
-<p>lognorm_df: dataframe
-pdna_cols: list
-z_low: int or None, lower range of z-scores to filter
-z_high: int or None, uppper range of z-scores to filter
+<p>lognorm_df: dataframe |
+pdna_cols: list |
+z_low: int or None, lower range of z-scores to filter |
+z_high: int or None, uppper range of z-scores to filter |
 returns: filtered dataframe</p>
 
 </div>
@@ -717,15 +717,15 @@ returns: dataframe with log-fold changes</p>
 <h4 id="average_replicate_lfcs" class="doc_header"><code>average_replicate_lfcs</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L87" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>average_replicate_lfcs</code>(<strong><code>lfcs</code></strong>, <strong><code>guide_col</code></strong>, <strong><code>condition_indices</code></strong>, <strong><code>sep</code></strong>=<em><code>'_'</code></em>, <strong><code>lfc_cols</code></strong>=<em><code>None</code></em>, <strong><code>condition_name</code></strong>=<em><code>'condition'</code></em>, <strong><code>lfc_name</code></strong>=<em><code>'avg_lfc'</code></em>)</p>
 </blockquote>
 <p>Average log-fold changes of sgRNAs across replicates</p>
-<p>lfcs: dataframe
-guide_col: str, sgrna column name
+<p>lfcs: dataframe |
+guide_col: str, sgrna column name |
 condition_indices: list of int, specifies which elements to use
-    for conditions after separating column names with sep
-sep: str, separator in column names
-lfc_cols: list or None, lfc column(s) to melt. If None use all columns that are not guide_col
-condition_name: str, name of condition columns
-lfc_name: str, name of new column with log-fold changes
-returns: dataframe of average lfcs</p>
+    for conditions after separating column names with sep |
+sep: str, separator in column names |
+lfc_cols: list or None, lfc column(s) to melt. If None use all columns that are not guide_col |
+condition_name: str, name of condition columns |
+lfc_name: str, name of new column with log-fold changes |
+returns: dataframe of average lfcs |</p>
 
 </div>
 
@@ -790,13 +790,13 @@ returns: dataframe of average lfcs</p>
 </blockquote>
 <p>Remap annotations dataframe such that control genes are grouped into
 pseudo-genes</p>
-<p>annotations: dataframe
-pseudogene_size: int
-gene_col: str
+<p>annotations: dataframe |
+pseudogene_size: int |
+gene_col: str |
 control_regex: list of str, regular expressions to identify groups of
-    pseudogenes
-seed: int, random seed for reproducible outputs
-returns: dataframe of annotations with controls grouped into pseudogenes</p>
+    pseudogenes |
+seed: int, random seed for reproducible outputs |
+returns: dataframe of annotations with controls grouped into pseudogenes |</p>
 
 </div>
 
@@ -1095,21 +1095,21 @@ returns: dataframe of annotations with controls grouped into pseudogenes</p>
 <h4 id="average_gene_lfcs" class="doc_header"><code>average_gene_lfcs</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L152" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>average_gene_lfcs</code>(<strong><code>lfcs</code></strong>, <strong><code>annotations</code></strong>, <strong><code>gene_col</code></strong>, <strong><code>condition_col</code></strong>=<em><code>'condition'</code></em>, <strong><code>lfc_col</code></strong>=<em><code>'avg_lfc'</code></em>, <strong><code>merge_on</code></strong>=<em><code>None</code></em>, <strong><code>lfc_merge_on</code></strong>=<em><code>None</code></em>, <strong><code>annotation_merge_on</code></strong>=<em><code>None</code></em>, <strong><code>controls_to_z</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Average log-fold changes of sgRNAs across genes</p>
-<p>lfcs: dataframe
-annotations: dataframe, mapping between sgRNAs and genes
-gene_col: str, column which uniquely identifies a gene
-condition_col: str, column which uniquely identifies experimental conditions
-lfc_col: str, name of value to average
+<p>lfcs: dataframe |
+annotations: dataframe, mapping between sgRNAs and genes |
+gene_col: str, column which uniquely identifies a gene |
+condition_col: str, column which uniquely identifies experimental conditions |
+lfc_col: str, name of value to average |
 merge_on: str or None, name of sgRNA column to merge on. Must be present in both
     lfc and annotation dataframes if supplied,
-    otherwise supply unique merge column to each
-lfc_merge_on: str or None, name of sgRNA column to merge on
+    otherwise supply unique merge column to each |
+lfc_merge_on: str or None, name of sgRNA column to merge on |
 annotation_merge_on: str, name of sgRNA column to merge on. Present in
-    annotation dataframe if supplied
+    annotation dataframe if supplied |
 controls_to_z: str or list of str or None, if supplied specifies
     control genes for z-scoring log-fold changes
     if string then interpreted as a regex
-    otherwise interpreted as a list of gene names found in gene_col
+    otherwise interpreted as a list of gene names found in gene_col |
 returns: dataframe, lfcs and (optionally) z-scores averaged by gene</p>
 
 </div>
@@ -1335,12 +1335,12 @@ returns: dataframe, lfcs and (optionally) z-scores averaged by gene</p>
 <h4 id="get_roc_aucs" class="doc_header"><code>get_roc_aucs</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L200" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_roc_aucs</code>(<strong><code>lfcs</code></strong>, <strong><code>tp_genes</code></strong>, <strong><code>fp_genes</code></strong>, <strong><code>gene_col</code></strong>, <strong><code>score_col</code></strong>=<em><code>'avg_lfc'</code></em>, <strong><code>group_col</code></strong>=<em><code>'condition'</code></em>)</p>
 </blockquote>
 <p>Calculate the ROC-AUC between true positive and false positive gene sets</p>
-<p>lfcs: dataframe
-tp_genes: list-like, true positive genes
-fp_genes: list-like, false positive genes
-gene_col: str
-score_col: str, column to use for ranking genes from smallest to largest
-group_col: list, columns to use for grouping genes
+<p>lfcs: dataframe |
+tp_genes: list-like, true positive genes |
+fp_genes: list-like, false positive genes |
+gene_col: str |
+score_col: str, column to use for ranking genes from smallest to largest |
+group_col: list, columns to use for grouping genes |
 returns: datafrme of roc_aucs</p>
 
 </div>

@@ -11,7 +11,7 @@ def lognorm(reads):
     Standardize read counts by calculating reads per million,
     adding a pseudo-count of one, and taking the log2
 
-    reads: numpy or pandas array
+    reads: numpy or pandas array |
     returns: numpy or pandas array
     """
     reads_per_million = (reads/reads.sum())*(10**6)
@@ -23,8 +23,8 @@ def lognorm_columns(reads_df, columns):
     """
     Calculate lognorms for specified columns
 
-    reads_df: dataframe
-    columns: list
+    reads_df: dataframe |
+    columns: list |
     returns: lognorm dataframe
     """
     lognorm_df = reads_df.copy()
@@ -36,10 +36,10 @@ def filter_pdna(lognorm_df, pdna_cols, z_low=-3, z_high=None):
     """
     Filter the lognorm dataframe based on the z_scored lognorms of pDNA
 
-    lognorm_df: dataframe
-    pdna_cols: list
-    z_low: int or None, lower range of z-scores to filter
-    z_high: int or None, uppper range of z-scores to filter
+    lognorm_df: dataframe |
+    pdna_cols: list |
+    z_low: int or None, lower range of z-scores to filter |
+    z_high: int or None, uppper range of z-scores to filter |
     returns: filtered dataframe
     """
     filtered_lognorms = lognorm_df.copy()
@@ -89,15 +89,15 @@ def average_replicate_lfcs(lfcs, guide_col, condition_indices, sep='_', lfc_cols
     """
     Average log-fold changes of sgRNAs across replicates
 
-    lfcs: dataframe
-    guide_col: str, sgrna column name
+    lfcs: dataframe |
+    guide_col: str, sgrna column name |
     condition_indices: list of int, specifies which elements to use
-        for conditions after separating column names with sep
-    sep: str, separator in column names
-    lfc_cols: list or None, lfc column(s) to melt. If None use all columns that are not guide_col
-    condition_name: str, name of condition columns
-    lfc_name: str, name of new column with log-fold changes
-    returns: dataframe of average lfcs
+        for conditions after separating column names with sep |
+    sep: str, separator in column names |
+    lfc_cols: list or None, lfc column(s) to melt. If None use all columns that are not guide_col |
+    condition_name: str, name of condition columns |
+    lfc_name: str, name of new column with log-fold changes |
+    returns: dataframe of average lfcs |
     """
     if lfc_cols is None:
         if not (lfcs.drop(guide_col,axis=1)
@@ -122,13 +122,13 @@ def group_pseudogenes(annotations, pseudogene_size,
     Remap annotations dataframe such that control genes are grouped into
     pseudo-genes
 
-    annotations: dataframe
-    pseudogene_size: int
-    gene_col: str
+    annotations: dataframe |
+    pseudogene_size: int |
+    gene_col: str |
     control_regex: list of str, regular expressions to identify groups of
-        pseudogenes
-    seed: int, random seed for reproducible outputs
-    returns: dataframe of annotations with controls grouped into pseudogenes
+        pseudogenes |
+    seed: int, random seed for reproducible outputs |
+    returns: dataframe of annotations with controls grouped into pseudogenes |
     """
     remapped_annotations = annotations.copy()
     genes = remapped_annotations[gene_col]
@@ -155,21 +155,21 @@ def average_gene_lfcs(lfcs, annotations, gene_col, condition_col='condition',
     """
     Average log-fold changes of sgRNAs across genes
 
-    lfcs: dataframe
-    annotations: dataframe, mapping between sgRNAs and genes
-    gene_col: str, column which uniquely identifies a gene
-    condition_col: str, column which uniquely identifies experimental conditions
-    lfc_col: str, name of value to average
+    lfcs: dataframe |
+    annotations: dataframe, mapping between sgRNAs and genes |
+    gene_col: str, column which uniquely identifies a gene |
+    condition_col: str, column which uniquely identifies experimental conditions |
+    lfc_col: str, name of value to average |
     merge_on: str or None, name of sgRNA column to merge on. Must be present in both
         lfc and annotation dataframes if supplied,
-        otherwise supply unique merge column to each
-    lfc_merge_on: str or None, name of sgRNA column to merge on
+        otherwise supply unique merge column to each |
+    lfc_merge_on: str or None, name of sgRNA column to merge on |
     annotation_merge_on: str, name of sgRNA column to merge on. Present in
-        annotation dataframe if supplied
+        annotation dataframe if supplied |
     controls_to_z: str or list of str or None, if supplied specifies
         control genes for z-scoring log-fold changes
         if string then interpreted as a regex
-        otherwise interpreted as a list of gene names found in gene_col
+        otherwise interpreted as a list of gene names found in gene_col |
     returns: dataframe, lfcs and (optionally) z-scores averaged by gene
     """
     annotated_lfcs = lfcs.merge(annotations, how='inner', on=merge_on, left_on=lfc_merge_on, right_on=annotation_merge_on)
@@ -201,12 +201,12 @@ def get_roc_aucs(lfcs, tp_genes, fp_genes, gene_col, score_col='avg_lfc', group_
     """
     Calculate the ROC-AUC between true positive and false positive gene sets
 
-    lfcs: dataframe
-    tp_genes: list-like, true positive genes
-    fp_genes: list-like, false positive genes
-    gene_col: str
-    score_col: str, column to use for ranking genes from smallest to largest
-    group_col: list, columns to use for grouping genes
+    lfcs: dataframe |
+    tp_genes: list-like, true positive genes |
+    fp_genes: list-like, false positive genes |
+    gene_col: str |
+    score_col: str, column to use for ranking genes from smallest to largest |
+    group_col: list, columns to use for grouping genes |
     returns: datafrme of roc_aucs
     """
     roc_df = lfcs.copy()
