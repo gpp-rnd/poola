@@ -306,7 +306,7 @@ returns: lognorm dataframe</p>
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>To mitigate this tail and account for sequencing biases we log-normalize read counts by taking $$ \log_2 \left ( \frac{\text{reads}}{\text{total reads in condition}} * 10^6 + 1 \night )$$</p>
+<p>To mitigate this tail and account for sequencing biases we log-normalize read counts by taking $$\log_2 \left ( \frac{\text{reads}}{\text{total reads in condition}} * 10^6 + 1 \night )$$</p>
 
 </div>
 </div>
@@ -523,10 +523,10 @@ returns: filtered dataframe</p>
 <h4 id="calculate_lfcs" class="doc_header"><code>calculate_lfcs</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L59" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>calculate_lfcs</code>(<strong><code>lognorm_df</code></strong>, <strong><code>ref_col</code></strong>=<em><code>None</code></em>, <strong><code>target_cols</code></strong>=<em><code>None</code></em>, <strong><code>ref_map</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Calculate log-fold changes between reference column and target columns</p>
-<p>lognorm_df: dataframe
-ref_col: str or None, if str then target_col must also be present
-target_col: list or None
-ref_map: dict or None, key-value pairs correspond to target-reference conditions
+<p>lognorm_df: dataframe |
+ref_col: str or None, if str then target_col must also be present |
+target_col: list or None |
+ref_map: dict or None, key-value pairs correspond to target-reference conditions |
 returns: dataframe with log-fold changes</p>
 
 </div>
@@ -626,7 +626,7 @@ returns: dataframe with log-fold changes</p>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;seaborn.matrix.ClusterGrid at 0x7f956c12cbe0&gt;</pre>
+<pre>&lt;seaborn.matrix.ClusterGrid at 0x7ff3b28889d0&gt;</pre>
 </div>
 
 </div>
@@ -714,7 +714,32 @@ returns: dataframe with log-fold changes</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="average_replicate_lfcs" class="doc_header"><code>average_replicate_lfcs</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L87" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>average_replicate_lfcs</code>(<strong><code>lfcs</code></strong>, <strong><code>guide_col</code></strong>, <strong><code>condition_indices</code></strong>, <strong><code>sep</code></strong>=<em><code>'_'</code></em>, <strong><code>lfc_cols</code></strong>=<em><code>None</code></em>, <strong><code>condition_name</code></strong>=<em><code>'condition'</code></em>, <strong><code>lfc_name</code></strong>=<em><code>'avg_lfc'</code></em>)</p>
+<h4 id="get_condition" class="doc_header"><code>get_condition</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L87" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_condition</code>(<strong><code>condition_name</code></strong>, <strong><code>sep</code></strong>, <strong><code>condition_indices</code></strong>)</p>
+</blockquote>
+<p>Split replicate name from condition name</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="average_replicate_lfcs" class="doc_header"><code>average_replicate_lfcs</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L94" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>average_replicate_lfcs</code>(<strong><code>lfcs</code></strong>, <strong><code>guide_col</code></strong>, <strong><code>condition_indices</code></strong>, <strong><code>sep</code></strong>=<em><code>'_'</code></em>, <strong><code>lfc_cols</code></strong>=<em><code>None</code></em>, <strong><code>condition_name</code></strong>=<em><code>'condition'</code></em>, <strong><code>lfc_name</code></strong>=<em><code>'avg_lfc'</code></em>)</p>
 </blockquote>
 <p>Average log-fold changes of sgRNAs across replicates</p>
 <p>lfcs: dataframe |
@@ -725,7 +750,7 @@ sep: str, separator in column names |
 lfc_cols: list or None, lfc column(s) to melt. If None use all columns that are not guide_col |
 condition_name: str, name of condition columns |
 lfc_name: str, name of new column with log-fold changes |
-returns: dataframe of average lfcs |</p>
+returns: dataframe of average lfcs</p>
 
 </div>
 
@@ -786,7 +811,7 @@ returns: dataframe of average lfcs |</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="group_pseudogenes" class="doc_header"><code>group_pseudogenes</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L119" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>group_pseudogenes</code>(<strong><code>annotations</code></strong>, <strong><code>pseudogene_size</code></strong>, <strong><code>gene_col</code></strong>, <strong><code>control_regex</code></strong>, <strong><code>seed</code></strong>=<em><code>7</code></em>)</p>
+<h4 id="group_pseudogenes" class="doc_header"><code>group_pseudogenes</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L128" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>group_pseudogenes</code>(<strong><code>annotations</code></strong>, <strong><code>pseudogene_size</code></strong>, <strong><code>gene_col</code></strong>, <strong><code>control_regex</code></strong>, <strong><code>seed</code></strong>=<em><code>7</code></em>)</p>
 </blockquote>
 <p>Remap annotations dataframe such that control genes are grouped into
 pseudo-genes</p>
@@ -1092,7 +1117,7 @@ returns: dataframe of annotations with controls grouped into pseudogenes |</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="average_gene_lfcs" class="doc_header"><code>average_gene_lfcs</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L152" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>average_gene_lfcs</code>(<strong><code>lfcs</code></strong>, <strong><code>annotations</code></strong>, <strong><code>gene_col</code></strong>, <strong><code>condition_col</code></strong>=<em><code>'condition'</code></em>, <strong><code>lfc_col</code></strong>=<em><code>'avg_lfc'</code></em>, <strong><code>merge_on</code></strong>=<em><code>None</code></em>, <strong><code>lfc_merge_on</code></strong>=<em><code>None</code></em>, <strong><code>annotation_merge_on</code></strong>=<em><code>None</code></em>, <strong><code>controls_to_z</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="average_gene_lfcs" class="doc_header"><code>average_gene_lfcs</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L161" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>average_gene_lfcs</code>(<strong><code>lfcs</code></strong>, <strong><code>annotations</code></strong>, <strong><code>gene_col</code></strong>, <strong><code>condition_col</code></strong>=<em><code>'condition'</code></em>, <strong><code>lfc_col</code></strong>=<em><code>'avg_lfc'</code></em>, <strong><code>merge_on</code></strong>=<em><code>None</code></em>, <strong><code>lfc_merge_on</code></strong>=<em><code>None</code></em>, <strong><code>annotation_merge_on</code></strong>=<em><code>None</code></em>, <strong><code>controls_to_z</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Average log-fold changes of sgRNAs across genes</p>
 <p>lfcs: dataframe |
@@ -1332,7 +1357,7 @@ returns: dataframe, lfcs and (optionally) z-scores averaged by gene</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_roc_aucs" class="doc_header"><code>get_roc_aucs</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L200" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_roc_aucs</code>(<strong><code>lfcs</code></strong>, <strong><code>tp_genes</code></strong>, <strong><code>fp_genes</code></strong>, <strong><code>gene_col</code></strong>, <strong><code>score_col</code></strong>=<em><code>'avg_lfc'</code></em>, <strong><code>group_col</code></strong>=<em><code>'condition'</code></em>)</p>
+<h4 id="get_roc_aucs" class="doc_header"><code>get_roc_aucs</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L209" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_roc_aucs</code>(<strong><code>lfcs</code></strong>, <strong><code>tp_genes</code></strong>, <strong><code>fp_genes</code></strong>, <strong><code>gene_col</code></strong>, <strong><code>score_col</code></strong>=<em><code>'avg_lfc'</code></em>, <strong><code>group_col</code></strong>=<em><code>'condition'</code></em>)</p>
 </blockquote>
 <p>Calculate the ROC-AUC between true positive and false positive gene sets</p>
 <p>lfcs: dataframe |
@@ -1504,7 +1529,7 @@ returns: datafrme of roc_aucs</p>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.legend.Legend at 0x7f9550c953a0&gt;</pre>
+<pre>&lt;matplotlib.legend.Legend at 0x7ff3b29db820&gt;</pre>
 </div>
 
 </div>
