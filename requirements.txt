@@ -1,11 +1,11 @@
-nbdev >= 1.1.12
-jupyterlab >= 3.0.5
-gpplot >= 0.5.0
-numpy >= 1.19.5
-pandas >= 1.2.1
-matplotlib >= 3.3.3
-seaborn >= 0.11.1
-gpplot >= 0.5.0
-openpyxl >= 3.06
-xlrd >= 2.0.1
-scikit-learn >= 0.24.1
+nbdev
+jupyterlab
+gpplot
+numpy
+pandas
+matplotlib
+seaborn
+gpplot
+openpyxl
+xlrd
+scikit-learn

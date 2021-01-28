@@ -29,9 +29,11 @@ read_counts = pd.read_excel(supp_reads,
                             sheet_name = 'A375_orig_tracr raw reads', 
                             header = None,
                             skiprows = 3, 
-                            names = ['sgRNA Sequence', 'pDNA', 'A375_RepA', 'A375_RepB'])
+                            names = ['sgRNA Sequence', 'pDNA', 'A375_RepA', 'A375_RepB'], 
+                            engine='openpyxl')
 guide_annotations = pd.read_excel(supp_reads,
-                                  sheet_name='sgRNA annotations')
+                                  sheet_name='sgRNA annotations', 
+                                  engine='openpyxl')
 ```
 
 ```
@@ -77,13 +79,14 @@ Finally, to evaluate the quality this screen, we'll calculate the ROC-AUC betwee
 
 ```
 noness_file = "https://www.embopress.org/action/downloadSupplement?doi=10.15252%2Fmsb.20145216&file=msb145216-sup-0001-DatasetS1.xlsx"
-noness_genes = (pd.read_excel(requests.get(noness_file).content, sheet_name='ReferenceSets', usecols=['Nonessential Genes (NE)'])
+noness_genes = (pd.read_excel(requests.get(noness_file).content, sheet_name='ReferenceSets', 
+                              usecols=['Nonessential Genes (NE)'], engine='openpyxl')
                 .rename({'Nonessential Genes (NE)': 'gene'}, axis=1))
 ess_file = 'http://tko.ccbr.utoronto.ca/Data/core-essential-genes-sym_HGNCID'
 ess_genes = pd.read_table(ess_file, names=['gene', 'gene_id'])
 ```
 
-    /Users/pdeweird/.local/share/virtualenvs/poola-tuJn2lJU/lib/python3.8/site-packages/openpyxl/worksheet/_reader.py:308: UserWarning: Unknown extension is not supported and will be removed
+    /Users/pdeweird/.local/share/virtualenvs/poola-tuJn2lJU/lib/python3.6/site-packages/openpyxl/worksheet/_reader.py:308: UserWarning: Unknown extension is not supported and will be removed
       warn(msg)
 
 
