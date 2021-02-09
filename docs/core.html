@@ -627,7 +627,7 @@ returns: dataframe with log-fold changes</p>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;seaborn.matrix.ClusterGrid at 0x150b6ad30&gt;</pre>
+<pre>&lt;seaborn.matrix.ClusterGrid at 0x15b1b47f0&gt;</pre>
 </div>
 
 </div>
@@ -784,7 +784,8 @@ returns: dataframe of average lfcs</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">avg_replicate_lfc_df</span> <span class="o">=</span> <span class="n">average_replicate_lfcs</span><span class="p">(</span><span class="n">lfcs</span><span class="o">=</span><span class="n">lfc_df</span><span class="p">,</span> <span class="n">guide_col</span><span class="o">=</span><span class="s1">&#39;sgRNA Sequence&#39;</span><span class="p">,</span> <span class="n">condition_indices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">avg_replicate_lfc_df</span> <span class="o">=</span> <span class="n">average_replicate_lfcs</span><span class="p">(</span><span class="n">lfcs</span><span class="o">=</span><span class="n">lfc_df</span><span class="p">,</span> <span class="n">guide_col</span><span class="o">=</span><span class="s1">&#39;sgRNA Sequence&#39;</span><span class="p">,</span> <span class="n">condition_indices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> 
+                                              <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;_&#39;</span><span class="p">)</span>
 <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">avg_replicate_lfc_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">read_counts</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">1000</span> 
 </pre></div>
 
@@ -1359,15 +1360,17 @@ returns: dataframe, lfcs and (optionally) z-scores averaged by gene</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_roc_aucs" class="doc_header"><code>get_roc_aucs</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L209" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_roc_aucs</code>(<strong><code>lfcs</code></strong>, <strong><code>tp_genes</code></strong>, <strong><code>fp_genes</code></strong>, <strong><code>gene_col</code></strong>, <strong><code>score_col</code></strong>=<em><code>'avg_lfc'</code></em>, <strong><code>group_col</code></strong>=<em><code>'condition'</code></em>)</p>
+<h4 id="get_roc_aucs" class="doc_header"><code>get_roc_aucs</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L209" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_roc_aucs</code>(<strong><code>lfcs</code></strong>, <strong><code>tp_genes</code></strong>, <strong><code>fp_genes</code></strong>, <strong><code>gene_col</code></strong>, <strong><code>score_col</code></strong>=<em><code>None</code></em>, <strong><code>group_col</code></strong>=<em><code>None</code></em>, <strong><code>conditions</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
-<p>Calculate the ROC-AUC between true positive and false positive gene sets</p>
+<p>Calculate the ROC-AUC between true positive and false positive gene sets.
+Must specificy score_col (and group_col optionally) or conditions</p>
 <p>lfcs: dataframe |
 tp_genes: list-like, true positive genes |
 fp_genes: list-like, false positive genes |
 gene_col: str |
-score_col: str, column to use for ranking genes from smallest to largest |
-group_col: list, columns to use for grouping genes |
+score_col: str, column for ranking genes from smallest to largest.
+group_col: str or list, columns to use for grouping genes.
+conditions: list, columns for which to calculate ROC-AUCs
 returns: datafrme of roc_aucs</p>
 
 </div>
@@ -1435,6 +1438,14 @@ returns: datafrme of roc_aucs</p>
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can calulate ROC-AUCs three different ways:</p>
+<p>1) We can specificy a <code>group_col</code> and <code>score_col</code></p>
+
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -1442,7 +1453,8 @@ returns: datafrme of roc_aucs</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">roc_aucs</span> <span class="o">=</span> <span class="n">get_roc_aucs</span><span class="p">(</span><span class="n">lfcs</span><span class="o">=</span><span class="n">gene_lfcs</span><span class="p">,</span> <span class="n">tp_genes</span><span class="o">=</span><span class="n">ess_genes</span><span class="o">.</span><span class="n">gene</span><span class="p">,</span> <span class="n">fp_genes</span><span class="o">=</span><span class="n">noness_genes</span><span class="o">.</span><span class="n">gene</span><span class="p">,</span> <span class="n">gene_col</span><span class="o">=</span><span class="s1">&#39;Annotated Gene Symbol&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">roc_aucs</span> <span class="o">=</span> <span class="n">get_roc_aucs</span><span class="p">(</span><span class="n">lfcs</span><span class="o">=</span><span class="n">gene_lfcs</span><span class="p">,</span> <span class="n">tp_genes</span><span class="o">=</span><span class="n">ess_genes</span><span class="o">.</span><span class="n">gene</span><span class="p">,</span> <span class="n">fp_genes</span><span class="o">=</span><span class="n">noness_genes</span><span class="o">.</span><span class="n">gene</span><span class="p">,</span> <span class="n">gene_col</span><span class="o">=</span><span class="s1">&#39;Annotated Gene Symbol&#39;</span><span class="p">,</span> 
+                        <span class="n">group_col</span><span class="o">=</span><span class="s1">&#39;condition&#39;</span><span class="p">,</span> <span class="n">score_col</span><span class="o">=</span><span class="s1">&#39;avg_lfc&#39;</span><span class="p">)</span>
 <span class="k">assert</span> <span class="n">roc_aucs</span><span class="p">[</span><span class="s1">&#39;ROC-AUC&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.9</span>
 <span class="n">roc_aucs</span>
 </pre></div>
@@ -1501,6 +1513,196 @@ returns: datafrme of roc_aucs</p>
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>2) Since we only have one condition we can also just supply the <code>score_col</code></p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">roc_aucs</span> <span class="o">=</span> <span class="n">get_roc_aucs</span><span class="p">(</span><span class="n">lfcs</span><span class="o">=</span><span class="n">gene_lfcs</span><span class="p">,</span> <span class="n">tp_genes</span><span class="o">=</span><span class="n">ess_genes</span><span class="o">.</span><span class="n">gene</span><span class="p">,</span> <span class="n">fp_genes</span><span class="o">=</span><span class="n">noness_genes</span><span class="o">.</span><span class="n">gene</span><span class="p">,</span> <span class="n">gene_col</span><span class="o">=</span><span class="s1">&#39;Annotated Gene Symbol&#39;</span><span class="p">,</span> 
+                        <span class="n">score_col</span><span class="o">=</span><span class="s1">&#39;avg_lfc&#39;</span><span class="p">)</span>
+<span class="n">roc_aucs</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0.976469058284762</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Finally, we can specificy <code>conditions</code> as a list of columns we want to calculate AUCs for</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">roc_aucs</span> <span class="o">=</span> <span class="n">get_roc_aucs</span><span class="p">(</span><span class="n">lfcs</span><span class="o">=</span><span class="n">gene_lfcs</span><span class="p">,</span> <span class="n">tp_genes</span><span class="o">=</span><span class="n">ess_genes</span><span class="o">.</span><span class="n">gene</span><span class="p">,</span> <span class="n">fp_genes</span><span class="o">=</span><span class="n">noness_genes</span><span class="o">.</span><span class="n">gene</span><span class="p">,</span> <span class="n">gene_col</span><span class="o">=</span><span class="s1">&#39;Annotated Gene Symbol&#39;</span><span class="p">,</span>
+                        <span class="n">conditions</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;avg_lfc&#39;</span><span class="p">])</span>
+<span class="n">roc_aucs</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>condition</th>
+      <th>ROC-AUC</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>avg_lfc</td>
+      <td>0.976469</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This is a useful approach when we want to quantify ROC-AUC at the guide level say</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">annotated_guide_lfcs</span> <span class="o">=</span> <span class="n">lfc_df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">guide_annotations</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;sgRNA Sequence&#39;</span><span class="p">)</span>
+<span class="n">roc_aucs</span> <span class="o">=</span> <span class="n">get_roc_aucs</span><span class="p">(</span><span class="n">lfcs</span><span class="o">=</span><span class="n">annotated_guide_lfcs</span><span class="p">,</span> <span class="n">tp_genes</span><span class="o">=</span><span class="n">ess_genes</span><span class="o">.</span><span class="n">gene</span><span class="p">,</span> <span class="n">fp_genes</span><span class="o">=</span><span class="n">noness_genes</span><span class="o">.</span><span class="n">gene</span><span class="p">,</span> <span class="n">gene_col</span><span class="o">=</span><span class="s1">&#39;Annotated Gene Symbol&#39;</span><span class="p">,</span>
+                        <span class="n">conditions</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;A375_RepA&#39;</span><span class="p">,</span> <span class="s1">&#39;A375_RepB&#39;</span><span class="p">])</span>
+<span class="n">roc_aucs</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>condition</th>
+      <th>ROC-AUC</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>A375_RepA</td>
+      <td>0.918284</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>A375_RepB</td>
+      <td>0.917580</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p>We can see this visually as well that essentials deplete the most followed by nonessentials and control genes</p>
 
 </div>
@@ -1533,7 +1735,7 @@ returns: datafrme of roc_aucs</p>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.legend.Legend at 0x150df4208&gt;</pre>
+<pre>&lt;matplotlib.legend.Legend at 0x15aef6278&gt;</pre>
 </div>
 
 </div>

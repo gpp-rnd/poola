@@ -111,6 +111,52 @@ nb_path: "index.ipynb"
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The input data has three columns with read counts and one column with sgRNA annotations</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">read_counts</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">memory_usage</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">null_counts</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 77441 entries, 0 to 77440
+Data columns (total 4 columns):
+ #   Column          Dtype 
+---  ------          ----- 
+ 0   sgRNA Sequence  object
+ 1   pDNA            int64 
+ 2   A375_RepA       int64 
+ 3   A375_RepB       int64 
+dtypes: int64(3), object(1)</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -144,6 +190,52 @@ nb_path: "index.ipynb"
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Note that the column names for the lognorms remain the same</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">lognorms</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">memory_usage</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">null_counts</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 77441 entries, 0 to 77440
+Data columns (total 4 columns):
+ #   Column          Dtype  
+---  ------          -----  
+ 0   sgRNA Sequence  object 
+ 1   pDNA            float64
+ 2   A375_RepA       float64
+ 3   A375_RepB       float64
+dtypes: float64(3), object(1)</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -152,7 +244,75 @@ nb_path: "index.ipynb"
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">lfc_df</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">calculate_lfcs</span><span class="p">(</span><span class="n">lognorm_df</span><span class="o">=</span><span class="n">filtered_lognorms</span><span class="p">,</span> <span class="n">ref_col</span><span class="o">=</span><span class="s1">&#39;pDNA&#39;</span><span class="p">,</span> <span class="n">target_cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;A375_RepA&#39;</span><span class="p">,</span> <span class="s1">&#39;A375_RepB&#39;</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We drop the pDNA column after calculating log-fold changes</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">lfc_df</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">memory_usage</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">null_counts</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+Int64Index: 76865 entries, 0 to 77440
+Data columns (total 3 columns):
+ #   Column          Dtype  
+---  ------          -----  
+ 0   sgRNA Sequence  object 
+ 1   A375_RepA       float64
+ 2   A375_RepB       float64
+dtypes: float64(2), object(1)</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Since we only have two conditions it's easy to visualize replicates as a point densityplot using <a href="https://github.com/gpp-rnd/gpplot">gpplot</a></p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
 <span class="n">gpplot</span><span class="o">.</span><span class="n">point_densityplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">lfc_df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;A375_RepA&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;A375_RepB&#39;</span><span class="p">)</span>
 <span class="n">gpplot</span><span class="o">.</span><span class="n">add_correlation</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">lfc_df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;A375_RepA&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;A375_RepB&#39;</span><span class="p">)</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">()</span>
@@ -209,14 +369,53 @@ nb_path: "index.ipynb"
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Before combining sgRNAs at the gene level, it's sometimes helpful to group controls into pseudo-genes so they're easier to compare with target genes.</p>
+<p>After averaging log-fold changes our dataframe is melted, so the condition column specifies the experimental condition (A375 here) and the n_obs specfies the number of replicates</p>
 
 </div>
 </div>
 </div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">avg_replicate_lfc_df</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">memory_usage</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">null_counts</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 76865 entries, 0 to 76864
+Data columns (total 4 columns):
+ #   Column          Dtype  
+---  ------          -----  
+ 0   sgRNA Sequence  object 
+ 1   condition       object 
+ 2   avg_lfc         float64
+ 3   n_obs           int64  
+dtypes: float64(1), int64(1), object(2)</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Using this reamapped annotations file, we'll average log-fold changes for each gene</p>
+<p>Before combining sgRNAs at the gene level, it's sometimes helpful to group controls into pseudo-genes so they're easier to compare with target genes. Our annotation file maps from sgRNA sequences to gene symbols</p>
 
 </div>
 </div>
@@ -231,11 +430,105 @@ nb_path: "index.ipynb"
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">remapped_annotations</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">group_pseudogenes</span><span class="p">(</span><span class="n">annotations</span><span class="o">=</span><span class="n">guide_annotations</span><span class="p">,</span> <span class="n">pseudogene_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> 
                                               <span class="n">gene_col</span><span class="o">=</span><span class="s1">&#39;Annotated Gene Symbol&#39;</span><span class="p">,</span> 
                                               <span class="n">control_regex</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;NO_CURRENT&#39;</span><span class="p">])</span>
-<span class="n">gene_lfcs</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">average_gene_lfcs</span><span class="p">(</span><span class="n">lfcs</span><span class="o">=</span><span class="n">avg_replicate_lfc_df</span><span class="p">,</span> <span class="n">annotations</span><span class="o">=</span><span class="n">remapped_annotations</span><span class="p">,</span> <span class="n">gene_col</span><span class="o">=</span><span class="s1">&#39;Annotated Gene Symbol&#39;</span><span class="p">,</span>
+<span class="n">remapped_annotations</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">memory_usage</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">null_counts</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 77441 entries, 0 to 77440
+Data columns (total 3 columns):
+ #   Column                 Dtype 
+---  ------                 ----- 
+ 0   sgRNA Sequence         object
+ 1   Annotated Gene Symbol  object
+ 2   Annotated Gene ID      object
+dtypes: object(3)</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Using this reamapped annotations file, we'll average log-fold changes for each gene</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">gene_lfcs</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">average_gene_lfcs</span><span class="p">(</span><span class="n">lfcs</span><span class="o">=</span><span class="n">avg_replicate_lfc_df</span><span class="p">,</span> <span class="n">annotations</span><span class="o">=</span><span class="n">remapped_annotations</span><span class="p">,</span> <span class="n">gene_col</span><span class="o">=</span><span class="s1">&#39;Annotated Gene Symbol&#39;</span><span class="p">,</span>
                                    <span class="n">merge_on</span><span class="o">=</span><span class="s1">&#39;sgRNA Sequence&#39;</span><span class="p">,</span> <span class="n">controls_to_z</span><span class="o">=</span><span class="s1">&#39;NO_CURRENT&#39;</span><span class="p">)</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The <code>controls_to_z</code> can be used which to specify which genes to use as a null distribution when z-scoring log-fold changes</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">gene_lfcs</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">memory_usage</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">null_counts</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+Int64Index: 19363 entries, 0 to 19362
+Data columns (total 7 columns):
+ #   Column                 Dtype  
+---  ------                 -----  
+ 0   condition              object 
+ 1   Annotated Gene Symbol  object 
+ 2   avg_lfc                float64
+ 3   n_obs                  int64  
+ 4   ctl_mean               float64
+ 5   ctl_sd                 float64
+ 6   avg_lfc_z-score        float64
+dtypes: float64(4), int64(1), object(2)</pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -293,8 +586,8 @@ nb_path: "index.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">roc_aucs</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">get_roc_aucs</span><span class="p">(</span><span class="n">lfcs</span><span class="o">=</span><span class="n">gene_lfcs</span><span class="p">,</span> <span class="n">tp_genes</span><span class="o">=</span><span class="n">ess_genes</span><span class="o">.</span><span class="n">gene</span><span class="p">,</span> <span class="n">fp_genes</span><span class="o">=</span><span class="n">noness_genes</span><span class="o">.</span><span class="n">gene</span><span class="p">,</span> <span class="n">gene_col</span><span class="o">=</span><span class="s1">&#39;Annotated Gene Symbol&#39;</span><span class="p">)</span>
-<span class="k">assert</span> <span class="n">roc_aucs</span><span class="p">[</span><span class="s1">&#39;ROC-AUC&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.9</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">roc_aucs</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">get_roc_aucs</span><span class="p">(</span><span class="n">lfcs</span><span class="o">=</span><span class="n">gene_lfcs</span><span class="p">,</span> <span class="n">tp_genes</span><span class="o">=</span><span class="n">ess_genes</span><span class="o">.</span><span class="n">gene</span><span class="p">,</span> <span class="n">fp_genes</span><span class="o">=</span><span class="n">noness_genes</span><span class="o">.</span><span class="n">gene</span><span class="p">,</span> 
+                             <span class="n">gene_col</span><span class="o">=</span><span class="s1">&#39;Annotated Gene Symbol&#39;</span><span class="p">,</span> <span class="n">score_col</span><span class="o">=</span><span class="s1">&#39;avg_lfc&#39;</span><span class="p">,</span> <span class="n">group_col</span><span class="o">=</span><span class="s1">&#39;condition&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ROC-AUC: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">roc_aucs</span><span class="p">[</span><span class="s1">&#39;ROC-AUC&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">)))</span>
 </pre></div>
 
@@ -309,6 +602,49 @@ nb_path: "index.ipynb"
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>ROC-AUC: 0.976
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Note that we can also use this function to calculate roc-aucs at the guide level</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">annotated_guide_lfcs</span> <span class="o">=</span> <span class="n">lfc_df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">guide_annotations</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;sgRNA Sequence&#39;</span><span class="p">)</span>
+<span class="n">roc_aucs</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">get_roc_aucs</span><span class="p">(</span><span class="n">lfcs</span><span class="o">=</span><span class="n">annotated_guide_lfcs</span><span class="p">,</span> <span class="n">tp_genes</span><span class="o">=</span><span class="n">ess_genes</span><span class="o">.</span><span class="n">gene</span><span class="p">,</span> <span class="n">fp_genes</span><span class="o">=</span><span class="n">noness_genes</span><span class="o">.</span><span class="n">gene</span><span class="p">,</span> <span class="n">gene_col</span><span class="o">=</span><span class="s1">&#39;Annotated Gene Symbol&#39;</span><span class="p">,</span>
+                             <span class="n">conditions</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;A375_RepA&#39;</span><span class="p">,</span> <span class="s1">&#39;A375_RepB&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Rep A AUC: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">roc_aucs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">roc_aucs</span><span class="o">.</span><span class="n">condition</span> <span class="o">==</span> <span class="s1">&#39;A375_RepA&#39;</span><span class="p">,</span> <span class="s1">&#39;ROC-AUC&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">4</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Rep B AUC: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">roc_aucs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">roc_aucs</span><span class="o">.</span><span class="n">condition</span> <span class="o">==</span> <span class="s1">&#39;A375_RepB&#39;</span><span class="p">,</span> <span class="s1">&#39;ROC-AUC&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">4</span><span class="p">)))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Rep A AUC: 0.9183
+Rep B AUC: 0.9176
 </pre>
 </div>
 </div>
