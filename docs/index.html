@@ -629,7 +629,8 @@ dtypes: float64(4), int64(1), object(2)</pre>
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">annotated_guide_lfcs</span> <span class="o">=</span> <span class="n">lfc_df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">guide_annotations</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;sgRNA Sequence&#39;</span><span class="p">)</span>
 <span class="n">roc_aucs</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">get_roc_aucs</span><span class="p">(</span><span class="n">lfcs</span><span class="o">=</span><span class="n">annotated_guide_lfcs</span><span class="p">,</span> <span class="n">tp_genes</span><span class="o">=</span><span class="n">ess_genes</span><span class="o">.</span><span class="n">gene</span><span class="p">,</span> <span class="n">fp_genes</span><span class="o">=</span><span class="n">noness_genes</span><span class="o">.</span><span class="n">gene</span><span class="p">,</span> <span class="n">gene_col</span><span class="o">=</span><span class="s1">&#39;Annotated Gene Symbol&#39;</span><span class="p">,</span>
                              <span class="n">conditions</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;A375_RepA&#39;</span><span class="p">,</span> <span class="s1">&#39;A375_RepB&#39;</span><span class="p">])</span>
-<span class="n">roc_aucs</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Rep A AUC: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">roc_aucs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">roc_aucs</span><span class="o">.</span><span class="n">condition</span> <span class="o">==</span> <span class="s1">&#39;A375_RepA&#39;</span><span class="p">,</span> <span class="s1">&#39;ROC-AUC&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">4</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Rep B AUC: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">roc_aucs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">roc_aucs</span><span class="o">.</span><span class="n">condition</span> <span class="o">==</span> <span class="s1">&#39;A375_RepB&#39;</span><span class="p">,</span> <span class="s1">&#39;ROC-AUC&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">4</span><span class="p">)))</span>
 </pre></div>
 
     </div>
@@ -641,46 +642,11 @@ dtypes: float64(4), int64(1), object(2)</pre>
 
 <div class="output_area">
 
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>condition</th>
-      <th>ROC-AUC</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>A375_RepA</td>
-      <td>0.918284</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>A375_RepB</td>
-      <td>0.917580</td>
-    </tr>
-  </tbody>
-</table>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Rep A AUC: 0.9183
+Rep B AUC: 0.9176
+</pre>
 </div>
-</div>
-
 </div>
 
 </div>

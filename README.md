@@ -211,47 +211,10 @@ Note that we can also use this function to calculate roc-aucs at the guide level
 annotated_guide_lfcs = lfc_df.merge(guide_annotations, how='inner', on='sgRNA Sequence')
 roc_aucs = pool.get_roc_aucs(lfcs=annotated_guide_lfcs, tp_genes=ess_genes.gene, fp_genes=noness_genes.gene, gene_col='Annotated Gene Symbol',
                              conditions=['A375_RepA', 'A375_RepB'])
-roc_aucs
+print('Rep A AUC: ' + str(round(roc_aucs.loc[roc_aucs.condition == 'A375_RepA', 'ROC-AUC'].values[0], 4)))
+print('Rep B AUC: ' + str(round(roc_aucs.loc[roc_aucs.condition == 'A375_RepB', 'ROC-AUC'].values[0], 4)))
 ```
 
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>condition</th>
-      <th>ROC-AUC</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>A375_RepA</td>
-      <td>0.918284</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>A375_RepB</td>
-      <td>0.917580</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
+    Rep A AUC: 0.9183
+    Rep B AUC: 0.9176
 
