@@ -206,23 +206,37 @@ def average_gene_lfcs(lfcs, annotations, gene_col, condition_col='condition',
 # Cell
 from sklearn.metrics import roc_auc_score
 
-def get_roc_aucs(lfcs, tp_genes, fp_genes, gene_col, score_col='avg_lfc', group_col='condition'):
+def get_roc_aucs(lfcs, tp_genes, fp_genes, gene_col, score_col=None, group_col=None, conditions=None):
     """
-    Calculate the ROC-AUC between true positive and false positive gene sets
+    Calculate the ROC-AUC between true positive and false positive gene sets.
+    Must specificy score_col (and group_col optionally) or conditions
 
     lfcs: dataframe |
     tp_genes: list-like, true positive genes |
     fp_genes: list-like, false positive genes |
     gene_col: str |
-    score_col: str, column to use for ranking genes from smallest to largest |
-    group_col: list, columns to use for grouping genes |
+    score_col: str, column for ranking genes from smallest to largest.
+    group_col: str or list, columns to use for grouping genes.
+    conditions: list, columns for which to calculate ROC-AUCs
     returns: datafrme of roc_aucs
     """
-    roc_df = lfcs.copy()
+    if conditions is not None:
+        score_col = 'lfc'
+        group_col = 'condition'
+        roc_df = lfcs.melt(id_vars=gene_col, value_vars=conditions, var_name=group_col, value_name=score_col)
+    elif score_col is not None:
+        roc_df = lfcs.copy()
+    else:
+        raise ValueError('conditions or score_col must be specified')
     roc_df = roc_df[roc_df[gene_col].isin(tp_genes) |
                     roc_df[gene_col].isin(fp_genes)]
     roc_df['tp'] = roc_df[gene_col].isin(tp_genes)
-    roc_aucs = (roc_df.groupby(group_col)
-                .apply(lambda df: roc_auc_score(df['tp'], -df[score_col]))
-                .reset_index(name='ROC-AUC'))
+
+    if score_col is not None:
+        if group_col is not None:
+            roc_aucs = (roc_df.groupby(group_col)
+                        .apply(lambda df: roc_auc_score(df['tp'], -df[score_col]))
+                        .reset_index(name='ROC-AUC'))
+        else:
+            roc_aucs = roc_auc_score(roc_df['tp'], -roc_df[score_col])
     return roc_aucs
