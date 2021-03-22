@@ -9,6 +9,9 @@ index = {"lognorm": "00_core.ipynb",
          "get_condition": "00_core.ipynb",
          "average_replicate_lfcs": "00_core.ipynb",
          "group_pseudogenes": "00_core.ipynb",
+         "get_control_lfcs": "00_core.ipynb",
+         "get_neg_ctl_z_score": "00_core.ipynb",
+         "scale_lfcs": "00_core.ipynb",
          "average_gene_lfcs": "00_core.ipynb",
          "get_roc_aucs": "00_core.ipynb"}
 

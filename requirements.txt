@@ -9,3 +9,5 @@ gpplot
 openpyxl
 xlrd
 scikit-learn
+statsmodels
+twine
