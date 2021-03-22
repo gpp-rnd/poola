@@ -1,6 +1,12 @@
-# poola
-> Python package for pooled screen analysis
+# Title
 
+
+
+[![PyPI version](https://badge.fury.io/py/poola.svg)](https://badge.fury.io/py/poola)
+
+# poola
+
+> Python package for pooled screen analysis
 
 ## Install
 
@@ -281,7 +287,7 @@ sns.despine()
 ```
 
 
-![png](docs/images/output_18_0.png)
+![png](docs/images/output_19_0.png)
 
 
 Since we see a strong correlation, we'll average the log-fold change of each sgRNA across replicates
