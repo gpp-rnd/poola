@@ -161,6 +161,7 @@ from pandas.api.types import is_list_like
 import scipy
 from statsmodels.stats.multitest import multipletests
 from sklearn.linear_model import LogisticRegression
+import pandas as pd
 
 
 def get_control_lfcs(annotated_lfcs, controls, gene_col):
