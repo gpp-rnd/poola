@@ -367,7 +367,7 @@ avg_replicate_lfc_df.head()
 
 
 
-Before combining sgRNAs at the gene level, it's sometimes helpful to group controls into pseudo-genes so they're easier to compare with target genes. Our annotation file maps from sgRNA sequences to gene symbols
+It's sometimes helpful to group controls into pseudo-genes so they're easier to compare with target genes. Our annotation file maps from sgRNA sequences to gene symbols
 
 ```python
 remapped_annotations = pool.group_pseudogenes(annotations=guide_annotations, pseudogene_size=4, 
@@ -439,21 +439,121 @@ remapped_annotations.head()
 
 
 
-Using this remapped annotations file, we'll average log-fold changes for each gene, and calculate z-scores using the nonessential genes as controls. When `z_score_neg_ctls=True`, we can specify `z_score_neg_ctl_genes` as a list or regex to specify genes for our null distribution. Note that if `z_score_neg_ctl_genes=None` then all genes are used to generate the null
+We provide two methods for scaling log-fold change values to controls:
+
+1. Z-score from a set of negative controls
+2. Scale scores between a set of negative and positive controls
+
+For both scoring methods, you can input either a regex or a list of genes to define control sets
+
+For our set of negative controls, we'll use [nonessential](https://doi.org/10.15252/msb.20145216) genes
 
 ```python
-nonessential_genes = (pd.read_table('https://raw.githubusercontent.com/gpp-rnd/genesets/master/human/non-essential-genes-Hart2014.txt', 
+nonessential_genes = (pd.read_table('https://raw.githubusercontent.com/gpp-rnd/genesets/master/human/non-essential-genes-Hart2014.txt',
                                     names=['gene'])
                       .gene)
-gene_lfcs = pool.average_gene_lfcs(lfcs=avg_replicate_lfc_df, annotations=remapped_annotations, gene_col='Annotated Gene Symbol',
-                                   merge_on='sgRNA Sequence', z_score_neg_ctls=True, 
-                                   z_score_neg_ctl_genes=nonessential_genes)
+annot_guide_lfcs = pool.annotate_guide_lfcs(avg_replicate_lfc_df, remapped_annotations, 'Annotated Gene Symbol',
+                                            merge_on='sgRNA Sequence', z_score_neg_ctls=True,
+                                            z_score_neg_ctl_genes=nonessential_genes)
+annot_guide_lfcs.head()
 ```
 
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>sgRNA Sequence</th>
+      <th>condition</th>
+      <th>avg_lfc</th>
+      <th>n_obs</th>
+      <th>Annotated Gene Symbol</th>
+      <th>Annotated Gene ID</th>
+      <th>z_scored_avg_lfc</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>AAAAAAAATCCGGACAATGG</td>
+      <td>A375</td>
+      <td>-0.744916</td>
+      <td>2</td>
+      <td>SLC25A24</td>
+      <td>29957</td>
+      <td>-1.651921</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>AAAAAAAGGATGGTGATCAA</td>
+      <td>A375</td>
+      <td>0.155998</td>
+      <td>2</td>
+      <td>FASTKD3</td>
+      <td>79072</td>
+      <td>0.166585</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>AAAAAAATGACATTACTGCA</td>
+      <td>A375</td>
+      <td>-1.172694</td>
+      <td>2</td>
+      <td>BCAS2</td>
+      <td>10286</td>
+      <td>-2.515396</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>AAAAAAATGTCAGTCGAGTG</td>
+      <td>A375</td>
+      <td>0.250441</td>
+      <td>2</td>
+      <td>GPR18</td>
+      <td>2841</td>
+      <td>0.357219</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>AAAAAACACAAGCAAGACCG</td>
+      <td>A375</td>
+      <td>-0.490166</td>
+      <td>2</td>
+      <td>ZNF470</td>
+      <td>388566</td>
+      <td>-1.137705</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+To aggregate scores at the gene level, we specify columns to average, and columns to z-score.
 From our z-scores we calculate a p-value and FDR using the [Benjamini-Hochberg procedure](http://www.biostathandbook.com/multiplecomparisons.html)
 
+
 ```python
-gene_lfcs.sort_values('z_scored_avg_lfc').head()
+gene_lfcs = pool.aggregate_gene_lfcs(annot_guide_lfcs, 'Annotated Gene Symbol',
+                                     average_cols=['avg_lfc'],
+                                     zscore_cols=['z_scored_avg_lfc'])
+gene_lfcs.head()
 ```
 
 
@@ -479,63 +579,63 @@ gene_lfcs.sort_values('z_scored_avg_lfc').head()
       <th></th>
       <th>condition</th>
       <th>Annotated Gene Symbol</th>
+      <th>n_guides</th>
       <th>avg_lfc</th>
-      <th>n_obs</th>
       <th>z_scored_avg_lfc</th>
       <th>z_scored_avg_lfc_p_value</th>
-      <th>z_scored_avg_lfc_fdr_bh</th>
+      <th>z_scored_avg_lfc_fdr</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>13317</th>
+      <th>0</th>
       <td>A375</td>
-      <td>PSMG3</td>
-      <td>-3.165679</td>
-      <td>4</td>
-      <td>-13.076520</td>
-      <td>4.485080e-39</td>
-      <td>8.684460e-35</td>
+      <td>A1BG</td>
+      <td>3</td>
+      <td>-0.084621</td>
+      <td>-0.552711</td>
+      <td>0.580461</td>
+      <td>0.872833</td>
     </tr>
     <tr>
-      <th>7375</th>
+      <th>1</th>
       <td>A375</td>
-      <td>HSPA5</td>
-      <td>-3.021085</td>
+      <td>A1CF</td>
       <td>4</td>
-      <td>-12.492789</td>
-      <td>8.173727e-36</td>
-      <td>7.913393e-32</td>
+      <td>0.500314</td>
+      <td>1.723181</td>
+      <td>0.084856</td>
+      <td>0.338055</td>
     </tr>
     <tr>
-      <th>4927</th>
+      <th>2</th>
       <td>A375</td>
-      <td>EIF6</td>
-      <td>-3.009939</td>
+      <td>A2M</td>
       <td>4</td>
-      <td>-12.447794</td>
-      <td>1.437640e-35</td>
-      <td>9.279010e-32</td>
+      <td>0.288629</td>
+      <td>0.868604</td>
+      <td>0.385064</td>
+      <td>0.759829</td>
     </tr>
     <tr>
-      <th>14219</th>
+      <th>3</th>
       <td>A375</td>
-      <td>RPL19</td>
-      <td>-2.993390</td>
+      <td>A2ML1</td>
       <td>4</td>
-      <td>-12.380987</td>
-      <td>3.312447e-35</td>
-      <td>1.603473e-31</td>
+      <td>-0.481786</td>
+      <td>-2.241580</td>
+      <td>0.024989</td>
+      <td>0.132164</td>
     </tr>
     <tr>
-      <th>12774</th>
+      <th>4</th>
       <td>A375</td>
-      <td>POLR2L</td>
-      <td>-2.970395</td>
+      <td>A3GALT2</td>
       <td>4</td>
-      <td>-12.288152</td>
-      <td>1.048764e-34</td>
-      <td>4.061445e-31</td>
+      <td>0.059362</td>
+      <td>-0.056952</td>
+      <td>0.954583</td>
+      <td>0.990693</td>
     </tr>
   </tbody>
 </table>
@@ -549,8 +649,8 @@ Finally, to evaluate the quality this screen, we'll calculate the ROC-AUC betwee
 essential_genes = (pd.read_table('https://raw.githubusercontent.com/gpp-rnd/genesets/master/human/essential-genes-Hart2015.txt', 
                                  names=['gene'])
                    .gene)
-roc_aucs = pool.get_roc_aucs(lfcs=gene_lfcs, tp_genes=essential_genes, fp_genes=nonessential_genes, 
-                             gene_col='Annotated Gene Symbol', score_col='avg_lfc', group_col='condition')
+roc_aucs, roc_df = pool.get_roc_aucs(lfcs=gene_lfcs, tp_genes=essential_genes, fp_genes=nonessential_genes, gene_col='Annotated Gene Symbol',
+                                     condition_col='condition', score_col='avg_lfc')
 print('ROC-AUC: ' + str(round(roc_aucs['ROC-AUC'].values[0], 3)))
 ```
 
@@ -561,12 +661,63 @@ Note that we can also use this function to calculate roc-aucs at the guide level
 
 ```python
 annotated_guide_lfcs = lfc_df.merge(guide_annotations, how='inner', on='sgRNA Sequence')
-roc_aucs = pool.get_roc_aucs(lfcs=annotated_guide_lfcs, tp_genes=essential_genes, fp_genes=nonessential_genes, gene_col='Annotated Gene Symbol',
-                             conditions=['A375_RepA', 'A375_RepB'])
-print('Rep A AUC: ' + str(round(roc_aucs.loc[roc_aucs.condition == 'A375_RepA', 'ROC-AUC'].values[0], 4)))
-print('Rep B AUC: ' + str(round(roc_aucs.loc[roc_aucs.condition == 'A375_RepB', 'ROC-AUC'].values[0], 4)))
+roc_aucs, roc_df = pool.get_roc_aucs(lfcs=annotated_guide_lfcs, tp_genes=essential_genes, fp_genes=nonessential_genes, gene_col='Annotated Gene Symbol',
+                                     condition_list=['A375_RepA', 'A375_RepB'])
+roc_aucs
 ```
 
-    Rep A AUC: 0.9185
-    Rep B AUC: 0.9176
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>condition</th>
+      <th>ROC-AUC</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>A375_RepA</td>
+      <td>0.918505</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>A375_RepB</td>
+      <td>0.917600</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+And plot ROC curves from the `roc_df`
+
+
+```python
+plt.subplots(figsize=(4,4))
+sns.lineplot(data=roc_df, x='fpr', y='tpr', hue='condition', ci=None)
+gpplot.add_xy_line()
+sns.despine()
+```
+
+
+![png](docs/images/output_33_0.png)
 
