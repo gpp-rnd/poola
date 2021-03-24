@@ -18,7 +18,7 @@ Or install the most recent distribution from PyPi:
 
 Additional packages required for this tutorial can be install using `pip install -r requirements.txt`
 
-```python
+```
 from poola import core as pool
 import pandas as pd
 import seaborn as sns
@@ -28,7 +28,7 @@ import matplotlib.pyplot as plt
 
 To demonstrate the functionality of this module we'll use read counts from [Sanson et al. 2018](https://doi.org/10.1038/s41467-018-07901-8).
 
-```python
+```
 supp_reads = 'https://static-content.springer.com/esm/art%3A10.1038%2Fs41467-018-07901-8/MediaObjects/41467_2018_7901_MOESM4_ESM.xlsx'
 read_counts = pd.read_excel(supp_reads,
                             sheet_name = 'A375_orig_tracr raw reads', 
@@ -43,7 +43,7 @@ guide_annotations = pd.read_excel(supp_reads,
 
 The input data has three columns with read counts and one column with sgRNA annotations
 
-```python
+```
 read_counts.head()
 ```
 
@@ -116,7 +116,7 @@ read_counts.head()
 
 
 
-```python
+```
 lognorms = pool.lognorm_columns(reads_df=read_counts, columns=['pDNA', 'A375_RepA', 'A375_RepB'])
 filtered_lognorms = pool.filter_pdna(lognorm_df=lognorms, pdna_cols=['pDNA'], z_low=-3)
 print('Filtered ' + str(lognorms.shape[0] - filtered_lognorms.shape[0]) + ' columns due to low pDNA abundance')
@@ -127,7 +127,7 @@ print('Filtered ' + str(lognorms.shape[0] - filtered_lognorms.shape[0]) + ' colu
 
 Note that the column names for the lognorms remain the same
 
-```python
+```
 lognorms.head()
 ```
 
@@ -200,13 +200,13 @@ lognorms.head()
 
 
 
-```python
+```
 lfc_df = pool.calculate_lfcs(lognorm_df=filtered_lognorms, ref_col='pDNA', target_cols=['A375_RepA', 'A375_RepB'])
 ```
 
 We drop the pDNA column after calculating log-fold changes
 
-```python
+```
 lfc_df.head()
 ```
 
@@ -275,7 +275,7 @@ lfc_df.head()
 
 Since we only have two conditions it's easy to visualize replicates as a point densityplot using [gpplot](https://github.com/gpp-rnd/gpplot)
 
-```python
+```
 plt.subplots(figsize=(4,4))
 gpplot.point_densityplot(data=lfc_df, x='A375_RepA', y='A375_RepB')
 gpplot.add_correlation(data=lfc_df, x='A375_RepA', y='A375_RepB')
@@ -288,13 +288,13 @@ sns.despine()
 
 Since we see a strong correlation, we'll average the log-fold change of each sgRNA across replicates
 
-```python
+```
 avg_replicate_lfc_df = pool.average_replicate_lfcs(lfcs=lfc_df, guide_col='sgRNA Sequence', condition_indices=[0], sep='_')
 ```
 
 After averaging log-fold changes our dataframe is melted, so the condition column specifies the experimental condition (A375 here) and the n_obs specifies the number of replicates
 
-```python
+```
 avg_replicate_lfc_df.head()
 ```
 
@@ -369,7 +369,7 @@ avg_replicate_lfc_df.head()
 
 It's sometimes helpful to group controls into pseudo-genes so they're easier to compare with target genes. Our annotation file maps from sgRNA sequences to gene symbols
 
-```python
+```
 remapped_annotations = pool.group_pseudogenes(annotations=guide_annotations, pseudogene_size=4, 
                                               gene_col='Annotated Gene Symbol', 
                                               control_regex=['NO_CURRENT'])
@@ -448,7 +448,7 @@ For both scoring methods, you can input either a regex or a list of genes to def
 
 For our set of negative controls, we'll use [nonessential](https://doi.org/10.15252/msb.20145216) genes
 
-```python
+```
 nonessential_genes = (pd.read_table('https://raw.githubusercontent.com/gpp-rnd/genesets/master/human/non-essential-genes-Hart2014.txt',
                                     names=['gene'])
                       .gene)
@@ -549,7 +549,7 @@ To aggregate scores at the gene level, we specify columns to average, and column
 From our z-scores we calculate a p-value and FDR using the [Benjamini-Hochberg procedure](http://www.biostathandbook.com/multiplecomparisons.html)
 
 
-```python
+```
 gene_lfcs = pool.aggregate_gene_lfcs(annot_guide_lfcs, 'Annotated Gene Symbol',
                                      average_cols=['avg_lfc'],
                                      zscore_cols=['z_scored_avg_lfc'])
@@ -645,7 +645,7 @@ gene_lfcs.head()
 
 Finally, to evaluate the quality this screen, we'll calculate the ROC-AUC between [essential](https://doi.org/10.1016/j.cell.2015.11.015) and [nonessential](https://doi.org/10.15252/msb.20145216) genes for each condition
 
-```python
+```
 essential_genes = (pd.read_table('https://raw.githubusercontent.com/gpp-rnd/genesets/master/human/essential-genes-Hart2015.txt', 
                                  names=['gene'])
                    .gene)
@@ -659,7 +659,7 @@ print('ROC-AUC: ' + str(round(roc_aucs['ROC-AUC'].values[0], 3)))
 
 Note that we can also use this function to calculate roc-aucs at the guide level
 
-```python
+```
 annotated_guide_lfcs = lfc_df.merge(guide_annotations, how='inner', on='sgRNA Sequence')
 roc_aucs, roc_df = pool.get_roc_aucs(lfcs=annotated_guide_lfcs, tp_genes=essential_genes, fp_genes=nonessential_genes, gene_col='Annotated Gene Symbol',
                                      condition_list=['A375_RepA', 'A375_RepB'])
@@ -711,7 +711,7 @@ roc_aucs
 And plot ROC curves from the `roc_df`
 
 
-```python
+```
 plt.subplots(figsize=(4,4))
 sns.lineplot(data=roc_df, x='fpr', y='tpr', hue='condition', ci=None)
 gpplot.add_xy_line()
