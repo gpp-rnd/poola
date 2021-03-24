@@ -102,7 +102,7 @@ def get_condition(condition_name, sep, condition_indices):
     condition = sep.join(relevant_condition_elements)
     return condition
 
-def average_replicate_lfcs(lfcs, guide_col, condition_indices, sep='_', lfc_cols=None,
+def average_replicate_lfcs(lfcs, guide_col, condition_indices=None, sep=None, lfc_cols=None,
                            condition_name='condition', lfc_name='avg_lfc'):
     """
     Average log-fold changes of sgRNAs across replicates
@@ -111,21 +111,23 @@ def average_replicate_lfcs(lfcs, guide_col, condition_indices, sep='_', lfc_cols
     guide_col: str, sgrna column name |
     condition_indices: list of int, specifies which elements to use
         for conditions after separating column names with sep |
-    sep: str, separator in column names |
+    sep: str or None, separator in column names |
     lfc_cols: list or None, lfc column(s) to melt. If None use all columns that are not guide_col |
     condition_name: str, name of condition columns |
     lfc_name: str, name of new column with log-fold changes |
     returns: dataframe of average lfcs
     """
     if lfc_cols is None:
-        if not (lfcs.drop(guide_col,axis=1)
-                .apply(is_numeric_dtype, axis=0).all()):
-            raise ValueError('If lfc_cols are not supplied then all columns except guide_col must be numeric')
+        # set lfc_cols to anything that's numeric
+        lfc_cols = lfcs.select_dtypes([np.number]).columns
     long_lfcs = (lfcs.melt(id_vars=guide_col, value_vars=lfc_cols,
                            var_name=condition_name, value_name=lfc_name)
                  .reset_index())
     conditions = long_lfcs[condition_name].unique()
-    condition_map = {cond: get_condition(cond, sep, condition_indices) for cond in conditions}
+    if (sep is None) or (condition_indices is None):
+        condition_map = {cond: cond for cond in conditions}
+    else:
+        condition_map = {cond: get_condition(cond, sep, condition_indices) for cond in conditions}
     long_lfcs[condition_name] = (long_lfcs[condition_name]
                                  .replace(condition_map))
     avg_lfcs = (long_lfcs.groupby([guide_col, condition_name])
