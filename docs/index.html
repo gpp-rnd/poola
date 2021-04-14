@@ -77,6 +77,8 @@ nb_path: "index.ipynb"
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 <span class="kn">import</span> <span class="nn">gpplot</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">stringdb</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
 </pre></div>
 
     </div>
@@ -525,7 +527,8 @@ nb_path: "index.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">avg_replicate_lfc_df</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">average_replicate_lfcs</span><span class="p">(</span><span class="n">lfcs</span><span class="o">=</span><span class="n">lfc_df</span><span class="p">,</span> <span class="n">guide_col</span><span class="o">=</span><span class="s1">&#39;sgRNA Sequence&#39;</span><span class="p">,</span> <span class="n">condition_indices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;_&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">avg_replicate_lfc_df</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">average_replicate_lfcs</span><span class="p">(</span><span class="n">lfcs</span><span class="o">=</span><span class="n">lfc_df</span><span class="p">,</span> <span class="n">guide_col</span><span class="o">=</span><span class="s1">&#39;sgRNA Sequence&#39;</span><span class="p">,</span> <span class="n">condition_indices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                                   <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;_&#39;</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -1143,6 +1146,332 @@ From our z-scores we calculate a p-value and FDR using the <a href="http://www.b
 <img src="data:image/png;base64,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devGI488wpw5c6qdp9SFxhjwxEdNjUeSffa06iuhuv7vL1983uxsHTx4sL766qs1sm3j0lk5HklV/f3vf9cHHnhAVVWvueYa/eGHH1RV9fDhw9q9e3cNCgrSDz744BfLzZo1S++4447S6cTERG3cuLH26NFDExISdMeOHRfc7rkxS5xOp44ePVqXLFmiqqrx8fG6d+9eVVXdsGGDDho0SFWLx0wZNmyYulwu3bt3r8bExGheXp6qqo4fP14/+eQTzczM1OjoaC0sLKxwm2Y8kipyuVzF/7jIeSRZWVncdNNNJCYmmptWebk5c+YwZswYAMaMGVP6i96iRQu2bdvGvn37mDVrVukYJWWXGzt2bOn0VVddxaFDh9i6dSuPP/74RVsq50ZVi4iIICMjg6FDh5Kdnc26deu48847iYuL4+GHHyY1NbV0mbvuuguHw0GHDh1o27YtP/30E4WFhXz99deMGjWK0NBQrr76apYvX14j743X9pGoq2RMB0flhSQzM5Phw4ezceNG/vnPf/KrX/2qltIZniY9PZ1Vq1axY8cORASXy1V6le65c4eio6Pp2rUra9euZfTo0aXLbdy4kc8//7x0XaGhoaX/vummm3j00UdJS0ur9Nqsc30kmZmZjBgxgilTpnDfffcRHh5e2ndSXvnzmUSEpUuXkpmZSffu3QHIzc0lODiYm2+++bLfl3O8uEVSXEikkkLicrlISEhg06ZNfPrpp6aIeLkFCxYwbtw4Dh06RHJyMkeOHKFNmzZ899135OXlAXD69Gm+//57OnXqVLrc/PnzGTFiBIGBgaXPHT9+vHQgo40bN+J2u6s0CHhYWBjvvfcekydPJigoiDZt2jB//nyguIti69at523X7Xazf/9+Dhw4QKdOnZgzZw4ff/wxycnJJCcnc/DgQZYvX05ubm613x+vbZG4z40yVcmujY+PD7/97W8JCwvjlltuqcVkhieaM2cOzz///HnP3XHHHUyYMAE/Pz9EBFXl2WefLf3FB5g7d+4vlluwYAF/+9vf8PX1JSgoiLlz51b5jOgrr7ySnj17MnfuXGbPns0jjzzC//zP/1BUVMSYMWPo2bMnAJ06dWLAgAGcOHGCqVOn4na7WbZsWekdHQEaNGjAddddx+LFi6v9Q+m145GcSNlP04+vYmO3V+g7+pnS50+ePMm2bdsYMmRItbdh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
 "
 >
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can do a gene set enrichment analysis using the package <a href="https://github.com/gpp-rnd/stringdb">stringdb</a></p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">gene_hits</span> <span class="o">=</span> <span class="n">gene_lfcs</span><span class="p">[(</span><span class="n">gene_lfcs</span><span class="p">[</span><span class="s1">&#39;z_scored_avg_lfc&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span>
+                      <span class="p">(</span><span class="n">gene_lfcs</span><span class="p">[</span><span class="s1">&#39;z_scored_avg_lfc_fdr&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.01</span><span class="p">)]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">genes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">gene_hits</span><span class="p">[</span><span class="s1">&#39;Annotated Gene Symbol&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+<span class="n">start_string_map</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+<span class="n">string_ids</span> <span class="o">=</span> <span class="n">stringdb</span><span class="o">.</span><span class="n">get_string_ids</span><span class="p">(</span><span class="n">genes</span><span class="p">)</span>
+<span class="n">end_string_map</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+<span class="n">enrichment_df</span> <span class="o">=</span> <span class="n">stringdb</span><span class="o">.</span><span class="n">get_enrichment</span><span class="p">(</span><span class="n">string_ids</span><span class="o">.</span><span class="n">queryItem</span><span class="p">)</span>
+<span class="n">end_enrichment_df</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;map time: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">end_string_map</span> <span class="o">-</span> <span class="n">start_string_map</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;enrichment time &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">end_enrichment_df</span> <span class="o">-</span> <span class="n">end_string_map</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-58-878c23fa2c1f&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> genes <span class="ansi-blue-fg">=</span> list<span class="ansi-blue-fg">(</span>gene_hits<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;Annotated Gene Symbol&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>unique<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> start_string_map <span class="ansi-blue-fg">=</span> datetime<span class="ansi-blue-fg">.</span>datetime<span class="ansi-blue-fg">.</span>now<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">----&gt; 5</span><span class="ansi-red-fg"> </span>string_ids <span class="ansi-blue-fg">=</span> stringdb<span class="ansi-blue-fg">.</span>get_string_ids<span class="ansi-blue-fg">(</span>genes<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span> end_string_map <span class="ansi-blue-fg">=</span> datetime<span class="ansi-blue-fg">.</span>datetime<span class="ansi-blue-fg">.</span>now<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      7</span> enrichment_df <span class="ansi-blue-fg">=</span> stringdb<span class="ansi-blue-fg">.</span>get_enrichment<span class="ansi-blue-fg">(</span>string_ids<span class="ansi-blue-fg">.</span>queryItem<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/.conda/envs/poola/lib/python3.6/site-packages/stringdb/api.py</span> in <span class="ansi-cyan-fg">get_string_ids</span><span class="ansi-blue-fg">(identifiers, species, limit, echo_query, caller_identity)</span>
+<span class="ansi-green-intense-fg ansi-bold">     70</span>     }
+<span class="ansi-green-intense-fg ansi-bold">     71</span>     results <span class="ansi-blue-fg">=</span> requests<span class="ansi-blue-fg">.</span>post<span class="ansi-blue-fg">(</span>request_url<span class="ansi-blue-fg">,</span> data<span class="ansi-blue-fg">=</span>params<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">---&gt; 72</span><span class="ansi-red-fg">     </span>df <span class="ansi-blue-fg">=</span> handle_results<span class="ansi-blue-fg">(</span>results<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     73</span>     <span class="ansi-green-fg">return</span> df
+<span class="ansi-green-intense-fg ansi-bold">     74</span> 
+
+<span class="ansi-green-fg">~/.conda/envs/poola/lib/python3.6/site-packages/stringdb/api.py</span> in <span class="ansi-cyan-fg">handle_results</span><span class="ansi-blue-fg">(results)</span>
+<span class="ansi-green-intense-fg ansi-bold">     36</span>         <span class="ansi-green-fg">return</span> df
+<span class="ansi-green-intense-fg ansi-bold">     37</span>     <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">---&gt; 38</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">raise</span> ValueError<span class="ansi-blue-fg">(</span>results<span class="ansi-blue-fg">.</span>reason<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     39</span> 
+<span class="ansi-green-intense-fg ansi-bold">     40</span> 
+
+<span class="ansi-red-fg">ValueError</span>: Bad Request</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">identifiers</span> <span class="o">=</span> <span class="n">genes</span><span class="p">[:</span><span class="mi">2000</span><span class="p">]</span>
+<span class="n">request_url</span> <span class="o">=</span> <span class="n">stringdb</span><span class="o">.</span><span class="n">build_request_url</span><span class="p">(</span><span class="s2">&quot;get_string_ids&quot;</span><span class="p">,</span> <span class="n">output_format</span><span class="o">=</span><span class="s1">&#39;tsv&#39;</span><span class="p">)</span>
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;identifiers&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\r</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">identifiers</span><span class="p">),</span>
+          <span class="s2">&quot;species&quot;</span><span class="p">:</span> <span class="mi">9606</span><span class="p">,</span>  <span class="c1"># species NCBI identifier</span>
+        <span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>  <span class="c1"># only one (best) identifier per input protein</span>
+        <span class="s2">&quot;echo_query&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>  <span class="c1"># see your input identifiers in the output</span>
+        <span class="s2">&quot;caller_identity&quot;</span><span class="p">:</span> <span class="s1">&#39;https://github.com/gpp-rnd/stringdb&#39;</span>
+    <span class="p">}</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">request_url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">results</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">genes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;TP53&#39;</span><span class="p">,</span> <span class="s1">&#39;BRCA1&#39;</span><span class="p">,</span> <span class="s1">&#39;FANCD1&#39;</span><span class="p">,</span> <span class="s1">&#39;FANCL&#39;</span><span class="p">]</span>
+<span class="n">string_ids</span> <span class="o">=</span> <span class="n">stringdb</span><span class="o">.</span><span class="n">get_string_ids</span><span class="p">(</span><span class="n">genes</span><span class="p">)</span>
+<span class="n">enrichment_df</span> <span class="o">=</span> <span class="n">stringdb</span><span class="o">.</span><span class="n">get_enrichment</span><span class="p">(</span><span class="n">string_ids</span><span class="o">.</span><span class="n">queryItem</span><span class="p">)</span>
+<span class="n">enrichment_df</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>category</th>
+      <th>term</th>
+      <th>number_of_genes</th>
+      <th>number_of_genes_in_background</th>
+      <th>ncbiTaxonId</th>
+      <th>inputGenes</th>
+      <th>preferredNames</th>
+      <th>p_value</th>
+      <th>fdr</th>
+      <th>description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Process</td>
+      <td>GO:0006978</td>
+      <td>3</td>
+      <td>17</td>
+      <td>9606</td>
+      <td>TP53,FANCD1,BRCA1</td>
+      <td>TP53,BRCA2,BRCA1</td>
+      <td>3.650000e-09</td>
+      <td>2.630000e-06</td>
+      <td>DNA damage response, signal transduction by p5...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Process</td>
+      <td>GO:0008630</td>
+      <td>3</td>
+      <td>71</td>
+      <td>9606</td>
+      <td>TP53,FANCD1,BRCA1</td>
+      <td>TP53,BRCA2,BRCA1</td>
+      <td>2.070000e-07</td>
+      <td>4.980000e-05</td>
+      <td>intrinsic apoptotic signaling pathway in respo...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Process</td>
+      <td>GO:0006281</td>
+      <td>4</td>
+      <td>491</td>
+      <td>9606</td>
+      <td>TP53,FANCD1,FANCL,BRCA1</td>
+      <td>TP53,BRCA2,FANCL,BRCA1</td>
+      <td>4.040000e-07</td>
+      <td>5.840000e-05</td>
+      <td>DNA repair</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Process</td>
+      <td>GO:0010212</td>
+      <td>3</td>
+      <td>149</td>
+      <td>9606</td>
+      <td>TP53,FANCD1,BRCA1</td>
+      <td>TP53,BRCA2,BRCA1</td>
+      <td>1.830000e-06</td>
+      <td>1.600000e-04</td>
+      <td>response to ionizing radiation</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Process</td>
+      <td>GO:0042771</td>
+      <td>2</td>
+      <td>30</td>
+      <td>9606</td>
+      <td>TP53,FANCD1</td>
+      <td>TP53,BRCA2</td>
+      <td>1.550000e-05</td>
+      <td>8.600000e-04</td>
+      <td>intrinsic apoptotic signaling pathway in respo...</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>177</th>
+      <td>PMID</td>
+      <td>PMID:31799622</td>
+      <td>3</td>
+      <td>8</td>
+      <td>9606</td>
+      <td>TP53,FANCD1,BRCA1</td>
+      <td>TP53,BRCA2,BRCA1</td>
+      <td>5.280000e-10</td>
+      <td>1.560000e-07</td>
+      <td>(2020) DSS1 interacts with and stimulates RAD5...</td>
+    </tr>
+    <tr>
+      <th>178</th>
+      <td>PMID</td>
+      <td>PMID:31871109</td>
+      <td>3</td>
+      <td>6</td>
+      <td>9606</td>
+      <td>TP53,FANCD1,BRCA1</td>
+      <td>TP53,BRCA2,BRCA1</td>
+      <td>2.690000e-10</td>
+      <td>1.560000e-07</td>
+      <td>(2020) Prevalence of Inherited Mutations in Br...</td>
+    </tr>
+    <tr>
+      <th>179</th>
+      <td>PMID</td>
+      <td>PMID:31935898</td>
+      <td>3</td>
+      <td>8</td>
+      <td>9606</td>
+      <td>TP53,FANCD1,BRCA1</td>
+      <td>TP53,BRCA2,BRCA1</td>
+      <td>5.280000e-10</td>
+      <td>1.560000e-07</td>
+      <td>(2020) Contralateral Prophylactic Mastectomy i...</td>
+    </tr>
+    <tr>
+      <th>180</th>
+      <td>NetworkNeighborAL</td>
+      <td>CL:12610</td>
+      <td>3</td>
+      <td>74</td>
+      <td>9606</td>
+      <td>FANCD1,FANCL,BRCA1</td>
+      <td>BRCA2,FANCL,BRCA1</td>
+      <td>2.340000e-07</td>
+      <td>4.200000e-06</td>
+      <td>Fanconi anemia pathway, and Homologous DNA Pai...</td>
+    </tr>
+    <tr>
+      <th>181</th>
+      <td>NetworkNeighborAL</td>
+      <td>CL:12660</td>
+      <td>2</td>
+      <td>5</td>
+      <td>9606</td>
+      <td>FANCD1,BRCA1</td>
+      <td>BRCA2,BRCA1</td>
+      <td>6.580000e-07</td>
+      <td>4.200000e-06</td>
+      <td>BRCA1-BARD1 complex, and Tower</td>
+    </tr>
+  </tbody>
+</table>
+<p>182 rows × 10 columns</p>
+</div>
 </div>
 
 </div>

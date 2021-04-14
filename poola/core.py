@@ -102,31 +102,34 @@ def get_condition(condition_name, sep, condition_indices):
     condition = sep.join(relevant_condition_elements)
     return condition
 
-def average_replicate_lfcs(lfcs, guide_col, condition_indices=None, sep=None, lfc_cols=None,
-                           condition_name='condition', lfc_name='avg_lfc'):
-    """
-    Average log-fold changes of sgRNAs across replicates
+def average_replicate_lfcs(lfcs, guide_col, condition_indices=None, sep=None, condition_map=None,
+                           lfc_cols=None, condition_name='condition', lfc_name='avg_lfc'):
+    """Average log-fold changes of sgRNAs across replicates
 
     lfcs: dataframe |
     guide_col: str, sgrna column name |
-    condition_indices: list of int, specifies which elements to use
+    condition_indices: list of int or None, specifies which elements to use
         for conditions after separating column names with sep |
     sep: str or None, separator in column names |
+    condition_map: dict or None, alternative to supplying condition_indices and sep. Keys are column
+        names and values are condition names |
     lfc_cols: list or None, lfc column(s) to melt. If None use all columns that are not guide_col |
     condition_name: str, name of condition columns |
     lfc_name: str, name of new column with log-fold changes |
     returns: dataframe of average lfcs
     """
     if lfc_cols is None:
-        # set lfc_cols to anything that's numeric
-        lfc_cols = lfcs.select_dtypes([np.number]).columns
+        if not (lfcs.drop(guide_col,axis=1)
+                .apply(is_numeric_dtype, axis=0).all()):
+            raise ValueError('If lfc_cols are not supplied then all columns except guide_col must be numeric')
     long_lfcs = (lfcs.melt(id_vars=guide_col, value_vars=lfc_cols,
                            var_name=condition_name, value_name=lfc_name)
                  .reset_index())
-    conditions = long_lfcs[condition_name].unique()
-    if (sep is None) or (condition_indices is None):
-        condition_map = {cond: cond for cond in conditions}
-    else:
+    if condition_map is None:
+        # must supply sep and condition_indices
+        if (sep is None) or (condition_indices is None):
+            raise ValueError('Must supply condition_map or sep with condition_indices')
+        conditions = long_lfcs[condition_name].unique()
         condition_map = {cond: get_condition(cond, sep, condition_indices) for cond in conditions}
     long_lfcs[condition_name] = (long_lfcs[condition_name]
                                  .replace(condition_map))
@@ -140,8 +143,7 @@ def average_replicate_lfcs(lfcs, guide_col, condition_indices=None, sep=None, lf
 # Cell
 def group_pseudogenes(annotations, pseudogene_size,
                       gene_col, control_regex, seed=7):
-    """
-    Remap annotations dataframe such that control genes are grouped into
+    """Remap annotations dataframe such that control genes are grouped into
     pseudo-genes
 
     annotations: dataframe |
