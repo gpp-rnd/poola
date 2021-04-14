@@ -289,7 +289,8 @@ sns.despine()
 Since we see a strong correlation, we'll average the log-fold change of each sgRNA across replicates
 
 ```
-avg_replicate_lfc_df = pool.average_replicate_lfcs(lfcs=lfc_df, guide_col='sgRNA Sequence', condition_indices=[0], sep='_')
+avg_replicate_lfc_df = pool.average_replicate_lfcs(lfcs=lfc_df, guide_col='sgRNA Sequence', condition_indices=[0],
+                                                   sep='_')
 ```
 
 After averaging log-fold changes our dataframe is melted, so the condition column specifies the experimental condition (A375 here) and the n_obs specifies the number of replicates
