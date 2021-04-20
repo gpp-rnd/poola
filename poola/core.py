@@ -127,10 +127,12 @@ def average_replicate_lfcs(lfcs, guide_col, condition_indices=None, sep=None, co
                  .reset_index())
     if condition_map is None:
         # must supply sep and condition_indices
-        if (sep is None) or (condition_indices is None):
-            raise ValueError('Must supply condition_map or sep with condition_indices')
-        conditions = long_lfcs[condition_name].unique()
-        condition_map = {cond: get_condition(cond, sep, condition_indices) for cond in conditions}
+        if (sep is not None) and (condition_indices is not None):
+            conditions = long_lfcs[condition_name].unique()
+            condition_map = {cond: get_condition(cond, sep, condition_indices) for cond in conditions}
+        elif ((sep is None) and (condition_indices is not None) or
+              (sep is not None) and (condition_indices is None)):
+            raise ValueError('Must supply sep AND condition_indices')
     long_lfcs[condition_name] = (long_lfcs[condition_name]
                                  .replace(condition_map))
     avg_lfcs = (long_lfcs.groupby([guide_col, condition_name])
@@ -355,8 +357,8 @@ def get_roc_aucs(lfcs, tp_genes, fp_genes, gene_col, score_col=None, condition_c
     Must specificy score_col (and group_col optionally) or conditions
 
     lfcs: dataframe |
-    tp_genes: list-like, true positive genes |
-    fp_genes: list-like, false positive genes |
+    tp_genes: list-like or str, true positive genes |
+    fp_genes: list-like or str, false positive genes |
     gene_col: str |
     score_col: str, column for ranking genes from smallest to largest.
     condition_col: str or list, columns to use for grouping genes.
@@ -372,22 +374,34 @@ def get_roc_aucs(lfcs, tp_genes, fp_genes, gene_col, score_col=None, condition_c
         roc_df = lfcs.copy()
     else:
         raise ValueError('conditions or score_col must be specified')
-    roc_df = roc_df[roc_df[gene_col].isin(tp_genes) |
-                    roc_df[gene_col].isin(fp_genes)]
-    roc_df['tp'] = roc_df[gene_col].isin(tp_genes)
+    if is_list_like(tp_genes):
+        tp_bool = roc_df[gene_col].isin(tp_genes)
+    elif type(tp_genes) is str:
+        tp_bool = roc_df[gene_col].str.contains(tp_genes)
+    else:
+        raise ValueError('tp_genes must be list-like or str')
+    if is_list_like(fp_genes):
+        fp_bool = roc_df[gene_col].isin(fp_genes)
+    elif type(fp_genes) is str:
+        fp_bool = roc_df[gene_col].str.contains(fp_genes)
+    else:
+        raise ValueError('fp_genes must be list-like or str')
+    roc_df['tp'] = tp_bool
+    filter_bool = (tp_bool | fp_bool)
+    roc_df = roc_df[filter_bool].reset_index(drop=True)
     if condition_col is not None:
         roc_aucs = (roc_df.groupby(condition_col)
                     .apply(lambda df: roc_auc_score(df['tp'], pos_control_direction * df[score_col]))
                     .reset_index(name='ROC-AUC'))
-        roc_df_list = []
+        tpr_fpr_df_list = []
         for group, df in roc_df.groupby(condition_col):
-            fpr, tpr, treshold = roc_curve(roc_df['tp'], pos_control_direction * roc_df[score_col])
-            group_roc_df = pd.DataFrame({'tpr': tpr, 'fpr': fpr, 'threshold': treshold})
-            group_roc_df[condition_col] = group
-            roc_df_list.append(group_roc_df)
-        roc_df = (pd.concat(roc_df_list).reset_index(drop=True))
+            fpr, tpr, treshold = roc_curve(df['tp'], pos_control_direction * df[score_col])
+            group_tpr_fpr_df = pd.DataFrame({'tpr': tpr, 'fpr': fpr, 'threshold': treshold})
+            group_tpr_fpr_df[condition_col] = group
+            tpr_fpr_df_list.append(group_tpr_fpr_df)
+        tpr_fpr_df = (pd.concat(tpr_fpr_df_list).reset_index(drop=True))
     else:
         roc_aucs = roc_auc_score(roc_df['tp'], pos_control_direction * roc_df[score_col])
         fpr, tpr, treshold = roc_curve(roc_df['tp'], pos_control_direction * roc_df[score_col])
-        roc_df = pd.DataFrame({'tpr': tpr, 'fpr': fpr, 'threshold': treshold})
-    return roc_aucs, roc_df
+        tpr_fpr_df = pd.DataFrame({'tpr': tpr, 'fpr': fpr, 'threshold': treshold})
+    return roc_aucs, tpr_fpr_df
