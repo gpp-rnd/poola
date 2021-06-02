@@ -11,7 +11,7 @@ from pandas.api.types import is_numeric_dtype, is_list_like
 from statsmodels.stats.multitest import multipletests
 import scipy
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import roc_auc_score, roc_curve
+from sklearn.metrics import roc_curve, auc
 import pandas as pd
 
 # Cell
@@ -393,19 +393,19 @@ def get_roc_aucs(lfcs, tp_genes, fp_genes, gene_col, score_col=None, condition_c
     filter_bool = (tp_bool | fp_bool)
     roc_df = roc_df[filter_bool].reset_index(drop=True)
     if condition_col is not None:
-        roc_aucs = (roc_df.groupby(condition_col)
-                    .apply(lambda df: roc_auc_score(df['tp'], pos_control_direction * df[score_col]))
-                    .reset_index()
-                    .rename({0: 'ROC-AUC'}, axis=1))
         tpr_fpr_df_list = []
+        roc_auc_list = []
         for group, df in roc_df.groupby(condition_col):
             fpr, tpr, treshold = roc_curve(df['tp'], pos_control_direction * df[score_col])
             group_tpr_fpr_df = pd.DataFrame({'tpr': tpr, 'fpr': fpr, 'threshold': treshold})
             group_tpr_fpr_df[condition_col] = group
             tpr_fpr_df_list.append(group_tpr_fpr_df)
+            roc_auc = auc(fpr, tpr)
+            roc_auc_list.append({condition_col: group, 'ROC-AUC': roc_auc})
+        roc_aucs = pd.DataFrame(roc_auc_list)
         tpr_fpr_df = (pd.concat(tpr_fpr_df_list).reset_index(drop=True))
     else:
-        roc_aucs = roc_auc_score(roc_df['tp'], pos_control_direction * roc_df[score_col])
         fpr, tpr, treshold = roc_curve(roc_df['tp'], pos_control_direction * roc_df[score_col])
         tpr_fpr_df = pd.DataFrame({'tpr': tpr, 'fpr': fpr, 'threshold': treshold})
+        roc_aucs = auc(fpr, tpr)
     return roc_aucs, tpr_fpr_df
