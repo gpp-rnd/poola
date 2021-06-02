@@ -648,7 +648,7 @@ returns: dataframe with log-fold changes</p>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;seaborn.matrix.ClusterGrid at 0x7f8435ddf6a0&gt;</pre>
+<pre>&lt;seaborn.matrix.ClusterGrid at 0x7fcb3a283748&gt;</pre>
 </div>
 
 </div>
@@ -1752,7 +1752,9 @@ returns: dataframe, lfcs aggregated at the gene level</p>
 <span class="n">gene_lfcs_copy</span> <span class="o">=</span> <span class="n">gene_lfcs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="n">gene_lfcs_copy</span><span class="p">[</span><span class="s1">&#39;z_essential&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">gene_lfcs_copy</span><span class="p">[</span><span class="s1">&#39;z_scored_avg_lfc_fdr&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">gene_lfcs_copy</span><span class="p">[</span><span class="s1">&#39;z_scored_avg_lfc&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
 <span class="n">gene_lfcs_copy</span><span class="p">[</span><span class="s1">&#39;p_essential&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">gene_lfcs_copy</span><span class="p">[</span><span class="s1">&#39;probability_positive_control&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">)</span>
-<span class="n">scoring_overlap</span> <span class="o">=</span> <span class="n">gene_lfcs_copy</span><span class="p">[[</span><span class="s1">&#39;z_essential&#39;</span><span class="p">,</span> <span class="s1">&#39;p_essential&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;n&#39;</span><span class="p">)</span>
+<span class="n">scoring_overlap</span> <span class="o">=</span> <span class="p">(</span><span class="n">gene_lfcs_copy</span><span class="p">[[</span><span class="s1">&#39;z_essential&#39;</span><span class="p">,</span> <span class="s1">&#39;p_essential&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+                   <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+                   <span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="mi">0</span><span class="p">:</span> <span class="s1">&#39;n&#39;</span><span class="p">},</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
 <span class="n">agree</span> <span class="o">=</span> <span class="n">scoring_overlap</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">scoring_overlap</span><span class="p">[</span><span class="s1">&#39;z_essential&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">scoring_overlap</span><span class="p">[</span><span class="s1">&#39;p_essential&#39;</span><span class="p">]),</span> <span class="s1">&#39;n&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 <span class="n">disagree</span> <span class="o">=</span> <span class="n">scoring_overlap</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">scoring_overlap</span><span class="p">[</span><span class="s1">&#39;z_essential&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">scoring_overlap</span><span class="p">[</span><span class="s1">&#39;p_essential&#39;</span><span class="p">]),</span> <span class="s1">&#39;n&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 <span class="n">accuracy</span> <span class="o">=</span> <span class="n">agree</span><span class="o">/</span><span class="p">(</span><span class="n">agree</span> <span class="o">+</span> <span class="n">disagree</span><span class="p">)</span>
@@ -2490,7 +2492,7 @@ between different control types defined by a regex.</p>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.legend.Legend at 0x7f841a8b1550&gt;</pre>
+<pre>&lt;matplotlib.legend.Legend at 0x7fcb1e46af28&gt;</pre>
 </div>
 
 </div>

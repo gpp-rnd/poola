@@ -395,7 +395,8 @@ def get_roc_aucs(lfcs, tp_genes, fp_genes, gene_col, score_col=None, condition_c
     if condition_col is not None:
         roc_aucs = (roc_df.groupby(condition_col)
                     .apply(lambda df: roc_auc_score(df['tp'], pos_control_direction * df[score_col]))
-                    .reset_index(name='ROC-AUC'))
+                    .reset_index()
+                    .rename({0: 'ROC-AUC'}, axis=1))
         tpr_fpr_df_list = []
         for group, df in roc_df.groupby(condition_col):
             fpr, tpr, treshold = roc_curve(df['tp'], pos_control_direction * df[score_col])
