@@ -123,8 +123,7 @@ def average_replicate_lfcs(lfcs, guide_col, condition_indices=None, sep=None, co
                 .apply(is_numeric_dtype, axis=0).all()):
             raise ValueError('If lfc_cols are not supplied then all columns except guide_col must be numeric')
     long_lfcs = (lfcs.melt(id_vars=guide_col, value_vars=lfc_cols,
-                           var_name=condition_name, value_name=lfc_name)
-                 .reset_index())
+                           var_name=condition_name, value_name=lfc_name))
     if condition_map is None:
         # must supply sep and condition_indices
         if (sep is not None) and (condition_indices is not None):
@@ -133,8 +132,12 @@ def average_replicate_lfcs(lfcs, guide_col, condition_indices=None, sep=None, co
         elif ((sep is None) and (condition_indices is not None) or
               (sep is not None) and (condition_indices is None)):
             raise ValueError('Must supply sep AND condition_indices')
-    long_lfcs[condition_name] = (long_lfcs[condition_name]
-                                 .replace(condition_map))
+    if condition_map is not None:
+        condition_map_df = pd.DataFrame({condition_name: condition_map.keys(),
+                                         condition_name + '_new': condition_map.values()})
+        long_lfcs = (long_lfcs.merge(condition_map_df, how='inner', on=condition_name)
+                     .drop(condition_name, axis=1)
+                     .rename({condition_name + '_new': condition_name}, axis=1))
     avg_lfcs = (long_lfcs.groupby([guide_col, condition_name])
                 .agg(avg_lfc = (lfc_name, 'mean'),
                      n_obs = (lfc_name, 'count'))
