@@ -163,7 +163,7 @@ def group_pseudogenes(annotations, pseudogene_size,
     genes = remapped_annotations[gene_col]
     control_remap = {}
     for regex in control_regex:
-        control_genes = genes[genes.str.contains(regex)].to_list()
+        control_genes = genes[genes.str.contains(regex, na=False)].to_list()
         np.random.seed(seed)
         np.random.shuffle(control_genes) # shuffle mutates existing variable
         n_controls = len(control_genes)
