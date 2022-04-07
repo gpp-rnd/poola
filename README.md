@@ -283,7 +283,9 @@ sns.despine()
 ```
 
 
+    
 ![png](docs/images/output_17_0.png)
+    
 
 
 Since we see a strong correlation, we'll average the log-fold change of each sgRNA across replicates
@@ -720,5 +722,7 @@ sns.despine()
 ```
 
 
+    
 ![png](docs/images/output_33_0.png)
+    
 
