@@ -72,7 +72,7 @@ nb_path: "00_core.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="lognorm" class="doc_header"><code>lognorm</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L21" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>lognorm</code>(<strong><code>reads</code></strong>)</p>
+<h4 id="lognorm" class="doc_header"><code>lognorm</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L23" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>lognorm</code>(<strong><code>reads</code></strong>)</p>
 </blockquote>
 <p>Standardize read counts by calculating reads per million,
 adding a pseudo-count of one, and taking the log2</p>
@@ -100,7 +100,7 @@ returns: numpy or pandas array</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="lognorm_columns" class="doc_header"><code>lognorm_columns</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L34" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>lognorm_columns</code>(<strong><code>reads_df</code></strong>, <strong><code>columns</code></strong>)</p>
+<h4 id="lognorm_columns" class="doc_header"><code>lognorm_columns</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L36" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>lognorm_columns</code>(<strong><code>reads_df</code></strong>, <strong><code>columns</code></strong>)</p>
 </blockquote>
 <p>Calculate lognorms for specified columns</p>
 <p>reads_df: dataframe |
@@ -396,7 +396,7 @@ returns: lognorm dataframe</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="filter_pdna" class="doc_header"><code>filter_pdna</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L48" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>filter_pdna</code>(<strong><code>lognorm_df</code></strong>, <strong><code>pdna_cols</code></strong>, <strong><code>z_low</code></strong>=<em><code>-3</code></em>, <strong><code>z_high</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="filter_pdna" class="doc_header"><code>filter_pdna</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L50" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>filter_pdna</code>(<strong><code>lognorm_df</code></strong>, <strong><code>pdna_cols</code></strong>, <strong><code>z_low</code></strong>=<em><code>-3</code></em>, <strong><code>z_high</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Filter the lognorm dataframe based on the z_scored lognorms of pDNA</p>
 <p>lognorm_df: dataframe |
@@ -542,7 +542,7 @@ returns: filtered dataframe</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="calculate_lfcs" class="doc_header"><code>calculate_lfcs</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L73" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>calculate_lfcs</code>(<strong><code>lognorm_df</code></strong>, <strong><code>ref_col</code></strong>=<em><code>None</code></em>, <strong><code>target_cols</code></strong>=<em><code>None</code></em>, <strong><code>ref_map</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="calculate_lfcs" class="doc_header"><code>calculate_lfcs</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L75" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>calculate_lfcs</code>(<strong><code>lognorm_df</code></strong>, <strong><code>ref_col</code></strong>=<em><code>None</code></em>, <strong><code>target_cols</code></strong>=<em><code>None</code></em>, <strong><code>ref_map</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Calculate log-fold changes between reference column and target columns</p>
 <p>lognorm_df: dataframe |
@@ -731,7 +731,7 @@ returns: dataframe with log-fold changes</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_condition" class="doc_header"><code>get_condition</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L100" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_condition</code>(<strong><code>condition_name</code></strong>, <strong><code>sep</code></strong>, <strong><code>condition_indices</code></strong>)</p>
+<h4 id="get_condition" class="doc_header"><code>get_condition</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L102" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_condition</code>(<strong><code>condition_name</code></strong>, <strong><code>sep</code></strong>, <strong><code>condition_indices</code></strong>)</p>
 </blockquote>
 <p>Split replicate name from condition name</p>
 
@@ -756,7 +756,7 @@ returns: dataframe with log-fold changes</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="average_replicate_lfcs" class="doc_header"><code>average_replicate_lfcs</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L107" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>average_replicate_lfcs</code>(<strong><code>lfcs</code></strong>, <strong><code>guide_col</code></strong>, <strong><code>condition_indices</code></strong>=<em><code>None</code></em>, <strong><code>sep</code></strong>=<em><code>None</code></em>, <strong><code>condition_map</code></strong>=<em><code>None</code></em>, <strong><code>lfc_cols</code></strong>=<em><code>None</code></em>, <strong><code>condition_name</code></strong>=<em><code>'condition'</code></em>, <strong><code>lfc_name</code></strong>=<em><code>'avg_lfc'</code></em>)</p>
+<h4 id="average_replicate_lfcs" class="doc_header"><code>average_replicate_lfcs</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L109" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>average_replicate_lfcs</code>(<strong><code>lfcs</code></strong>, <strong><code>guide_col</code></strong>, <strong><code>condition_indices</code></strong>=<em><code>None</code></em>, <strong><code>sep</code></strong>=<em><code>None</code></em>, <strong><code>condition_map</code></strong>=<em><code>None</code></em>, <strong><code>lfc_cols</code></strong>=<em><code>None</code></em>, <strong><code>condition_name</code></strong>=<em><code>'condition'</code></em>, <strong><code>lfc_name</code></strong>=<em><code>'avg_lfc'</code></em>)</p>
 </blockquote>
 <p>Average log-fold changes of sgRNAs across replicates</p>
 <p>lfcs: dataframe |
@@ -884,7 +884,7 @@ returns: dataframe of average lfcs</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="group_pseudogenes" class="doc_header"><code>group_pseudogenes</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L151" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>group_pseudogenes</code>(<strong><code>annotations</code></strong>, <strong><code>pseudogene_size</code></strong>, <strong><code>gene_col</code></strong>, <strong><code>control_regex</code></strong>, <strong><code>seed</code></strong>=<em><code>7</code></em>)</p>
+<h4 id="group_pseudogenes" class="doc_header"><code>group_pseudogenes</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L153" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>group_pseudogenes</code>(<strong><code>annotations</code></strong>, <strong><code>pseudogene_size</code></strong>, <strong><code>gene_col</code></strong>, <strong><code>control_regex</code></strong>, <strong><code>seed</code></strong>=<em><code>7</code></em>)</p>
 </blockquote>
 <p>Remap annotations dataframe such that control genes are grouped into
 pseudo-genes</p>
@@ -1205,7 +1205,7 @@ returns: dataframe of annotations with controls grouped into pseudogenes |</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_annotated_lfcs" class="doc_header"><code>get_annotated_lfcs</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L182" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_annotated_lfcs</code>(<strong><code>lfcs</code></strong>, <strong><code>annotations</code></strong>, <strong><code>merge_on</code></strong>=<em><code>None</code></em>, <strong><code>lfc_merge_on</code></strong>=<em><code>None</code></em>, <strong><code>annotation_merge_on</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="get_annotated_lfcs" class="doc_header"><code>get_annotated_lfcs</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L184" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_annotated_lfcs</code>(<strong><code>lfcs</code></strong>, <strong><code>annotations</code></strong>, <strong><code>merge_on</code></strong>=<em><code>None</code></em>, <strong><code>lfc_merge_on</code></strong>=<em><code>None</code></em>, <strong><code>annotation_merge_on</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Merge lfcs and annotatsion</p>
 <p>lfcs: dataframe, log-fold changes
@@ -1237,7 +1237,7 @@ annotation_merge_on: str or None, name of sgRNA column to merge on</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_control_lfcs" class="doc_header"><code>get_control_lfcs</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L197" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_control_lfcs</code>(<strong><code>annotated_lfcs</code></strong>, <strong><code>controls</code></strong>, <strong><code>gene_col</code></strong>)</p>
+<h4 id="get_control_lfcs" class="doc_header"><code>get_control_lfcs</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L199" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_control_lfcs</code>(<strong><code>annotated_lfcs</code></strong>, <strong><code>controls</code></strong>, <strong><code>gene_col</code></strong>)</p>
 </blockquote>
 <p>Get lfcs from control populations</p>
 <p>annotated_lfcs: dataframe, merged lfcs and annotations |
@@ -1266,7 +1266,7 @@ gene_col: str, column which uniquely identifies a gene |</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_neg_ctl_z_score" class="doc_header"><code>get_neg_ctl_z_score</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L216" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_neg_ctl_z_score</code>(<strong><code>lfcs</code></strong>, <strong><code>negative_controls</code></strong>, <strong><code>gene_col</code></strong>, <strong><code>condition_col</code></strong>, <strong><code>lfc_col</code></strong>)</p>
+<h4 id="get_neg_ctl_z_score" class="doc_header"><code>get_neg_ctl_z_score</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L218" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_neg_ctl_z_score</code>(<strong><code>lfcs</code></strong>, <strong><code>negative_controls</code></strong>, <strong><code>gene_col</code></strong>, <strong><code>condition_col</code></strong>, <strong><code>lfc_col</code></strong>)</p>
 </blockquote>
 <p>Z-score lfcs by negative control population</p>
 <p>lfcs: dataframe, merged lfcs and annotations |
@@ -1298,7 +1298,7 @@ returns: dataframe, gene lfcs with column for z-score</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="scale_lfcs" class="doc_header"><code>scale_lfcs</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L240" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>scale_lfcs</code>(<strong><code>lfcs</code></strong>, <strong><code>negative_controls</code></strong>, <strong><code>positive_controls</code></strong>, <strong><code>gene_col</code></strong>, <strong><code>condition_col</code></strong>, <strong><code>lfc_col</code></strong>, <strong><code>pos_control_direction</code></strong>)</p>
+<h4 id="scale_lfcs" class="doc_header"><code>scale_lfcs</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L242" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>scale_lfcs</code>(<strong><code>lfcs</code></strong>, <strong><code>negative_controls</code></strong>, <strong><code>positive_controls</code></strong>, <strong><code>gene_col</code></strong>, <strong><code>condition_col</code></strong>, <strong><code>lfc_col</code></strong>, <strong><code>pos_control_direction</code></strong>)</p>
 </blockquote>
 <p>Scale lfcs between negative and positive control populations</p>
 <p>lfcs: dataframe, merged lfcs and annotations |
@@ -1389,7 +1389,7 @@ returns: dataframe, gene lfcs with column for z-score and z-score p-values</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="annotate_guide_lfcs" class="doc_header"><code>annotate_guide_lfcs</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L284" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>annotate_guide_lfcs</code>(<strong><code>lfcs</code></strong>, <strong><code>annotations</code></strong>, <strong><code>gene_col</code></strong>, <strong><code>condition_col</code></strong>=<em><code>'condition'</code></em>, <strong><code>lfc_col</code></strong>=<em><code>'avg_lfc'</code></em>, <strong><code>merge_on</code></strong>=<em><code>None</code></em>, <strong><code>lfc_merge_on</code></strong>=<em><code>None</code></em>, <strong><code>annotation_merge_on</code></strong>=<em><code>None</code></em>, <strong><code>z_score_neg_ctls</code></strong>=<em><code>False</code></em>, <strong><code>z_score_neg_ctl_genes</code></strong>=<em><code>None</code></em>, <strong><code>scale_ctls</code></strong>=<em><code>False</code></em>, <strong><code>scale_neg_ctl_genes</code></strong>=<em><code>None</code></em>, <strong><code>scale_pos_ctl_genes</code></strong>=<em><code>None</code></em>, <strong><code>pos_control_direction</code></strong>=<em><code>-1</code></em>)</p>
+<h4 id="annotate_guide_lfcs" class="doc_header"><code>annotate_guide_lfcs</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L286" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>annotate_guide_lfcs</code>(<strong><code>lfcs</code></strong>, <strong><code>annotations</code></strong>, <strong><code>gene_col</code></strong>, <strong><code>condition_col</code></strong>=<em><code>'condition'</code></em>, <strong><code>lfc_col</code></strong>=<em><code>'avg_lfc'</code></em>, <strong><code>merge_on</code></strong>=<em><code>None</code></em>, <strong><code>lfc_merge_on</code></strong>=<em><code>None</code></em>, <strong><code>annotation_merge_on</code></strong>=<em><code>None</code></em>, <strong><code>z_score_neg_ctls</code></strong>=<em><code>False</code></em>, <strong><code>z_score_neg_ctl_genes</code></strong>=<em><code>None</code></em>, <strong><code>scale_ctls</code></strong>=<em><code>False</code></em>, <strong><code>scale_neg_ctl_genes</code></strong>=<em><code>None</code></em>, <strong><code>scale_pos_ctl_genes</code></strong>=<em><code>None</code></em>, <strong><code>pos_control_direction</code></strong>=<em><code>-1</code></em>)</p>
 </blockquote>
 <p>Join guide log-fold changes with annotations, and optionally calculate z-scores and scaled scores</p>
 <p>lfcs: dataframe |
@@ -1698,7 +1698,7 @@ returns: dataframe, lfcs and (optionally) z-scores averaged by gene</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="aggregate_gene_lfcs" class="doc_header"><code>aggregate_gene_lfcs</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L327" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>aggregate_gene_lfcs</code>(<strong><code>lfcs</code></strong>, <strong><code>gene_col</code></strong>, <strong><code>condition_col</code></strong>=<em><code>'condition'</code></em>, <strong><code>average_cols</code></strong>=<em><code>None</code></em>, <strong><code>zscore_cols</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="aggregate_gene_lfcs" class="doc_header"><code>aggregate_gene_lfcs</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L329" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>aggregate_gene_lfcs</code>(<strong><code>lfcs</code></strong>, <strong><code>gene_col</code></strong>, <strong><code>condition_col</code></strong>=<em><code>'condition'</code></em>, <strong><code>average_cols</code></strong>=<em><code>None</code></em>, <strong><code>zscore_cols</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Aggregate log-fold changes at the gene level</p>
 <p>lfcs: dataframe, scores with annotations |
@@ -1729,11 +1729,10 @@ returns: dataframe, lfcs aggregated at the gene level</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_hypergeometric_pval" class="doc_header"><code>get_hypergeometric_pval</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L356" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_hypergeometric_pval</code>(<strong><code>df</code></strong>, <strong><code>total_guides</code></strong>)</p>
+<h4 id="get_hypergeometric_pval" class="doc_header"><code>get_hypergeometric_pval</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L358" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_hypergeometric_pval</code>(<strong><code>df</code></strong>, <strong><code>name</code></strong>)</p>
 </blockquote>
 <p>Calculates the p-value for a gene using the hypergeometric test</p>
 <p>df: dataframe, scores with annotations per gene
-total_guides: int, Total number of guides in the library
 returns: str of ascending constuct ranks, str of descending construct ranks and -log10(avg. p-value) for gene</p>
 
 </div>
@@ -1757,7 +1756,35 @@ returns: str of ascending constuct ranks, str of descending construct ranks and 
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="aggregate_gene_lfcs_hypergeometric" class="doc_header"><code>aggregate_gene_lfcs_hypergeometric</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L371" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>aggregate_gene_lfcs_hypergeometric</code>(<strong><code>lfcs</code></strong>, <strong><code>gene_col</code></strong>, <strong><code>condition_col</code></strong>=<em><code>'condition'</code></em>, <strong><code>average_cols</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="apply_parallel" class="doc_header"><code>apply_parallel</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L373" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>apply_parallel</code>(<strong><code>df</code></strong>, <strong><code>func</code></strong>)</p>
+</blockquote>
+<p>Parallelizes calculation of hypergeometric p-values</p>
+<p>df: dataframe, df grouped by condition, gene symbol
+func: name of function to call
+return: tuple, str of ascending constuct ranks, str of descending construct ranks and -log10(avg. p-value) for gene</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="aggregate_gene_lfcs_hypergeometric" class="doc_header"><code>aggregate_gene_lfcs_hypergeometric</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L384" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>aggregate_gene_lfcs_hypergeometric</code>(<strong><code>lfcs</code></strong>, <strong><code>gene_col</code></strong>, <strong><code>condition_col</code></strong>=<em><code>'condition'</code></em>, <strong><code>average_cols</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Aggregate log-fold changes at the gene level and calculate p-values using the hypergeometric test</p>
 <p>lfcs: dataframe, scores with annotations |
@@ -2290,7 +2317,7 @@ returns: dataframe, lfcs aggregated at the gene level</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_roc_aucs" class="doc_header"><code>get_roc_aucs</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L402" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_roc_aucs</code>(<strong><code>lfcs</code></strong>, <strong><code>tp_genes</code></strong>, <strong><code>fp_genes</code></strong>, <strong><code>gene_col</code></strong>, <strong><code>score_col</code></strong>=<em><code>None</code></em>, <strong><code>condition_col</code></strong>=<em><code>None</code></em>, <strong><code>condition_list</code></strong>=<em><code>None</code></em>, <strong><code>pos_control_direction</code></strong>=<em><code>-1</code></em>)</p>
+<h4 id="get_roc_aucs" class="doc_header"><code>get_roc_aucs</code><a href="https://github.com/gpp-rnd/poola/tree/master/poola/core.py#L414" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_roc_aucs</code>(<strong><code>lfcs</code></strong>, <strong><code>tp_genes</code></strong>, <strong><code>fp_genes</code></strong>, <strong><code>gene_col</code></strong>, <strong><code>score_col</code></strong>=<em><code>None</code></em>, <strong><code>condition_col</code></strong>=<em><code>None</code></em>, <strong><code>condition_list</code></strong>=<em><code>None</code></em>, <strong><code>pos_control_direction</code></strong>=<em><code>-1</code></em>)</p>
 </blockquote>
 <p>Calculate the ROC-AUC between true positive and false positive gene sets.
 Must specificy score_col (and group_col optionally) or conditions</p>

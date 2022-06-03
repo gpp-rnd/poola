@@ -16,6 +16,7 @@ index = {"lognorm": "00_core.ipynb",
          "annotate_guide_lfcs": "00_core.ipynb",
          "aggregate_gene_lfcs": "00_core.ipynb",
          "get_hypergeometric_pval": "00_core.ipynb",
+         "apply_parallel": "00_core.ipynb",
          "aggregate_gene_lfcs_hypergeometric": "00_core.ipynb",
          "get_roc_aucs": "00_core.ipynb"}
 

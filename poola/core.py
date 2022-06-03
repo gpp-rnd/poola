@@ -2,7 +2,7 @@
 
 __all__ = ['lognorm', 'lognorm_columns', 'filter_pdna', 'calculate_lfcs', 'get_condition', 'average_replicate_lfcs',
            'group_pseudogenes', 'get_annotated_lfcs', 'get_control_lfcs', 'get_neg_ctl_z_score', 'scale_lfcs',
-           'annotate_guide_lfcs', 'aggregate_gene_lfcs', 'get_hypergeometric_pval',
+           'annotate_guide_lfcs', 'aggregate_gene_lfcs', 'get_hypergeometric_pval', 'apply_parallel',
            'aggregate_gene_lfcs_hypergeometric', 'get_roc_aucs']
 
 # Cell
@@ -10,11 +10,13 @@ __all__ = ['lognorm', 'lognorm_columns', 'filter_pdna', 'calculate_lfcs', 'get_c
 import numpy as np
 from pandas.api.types import is_numeric_dtype, is_list_like
 from statsmodels.stats.multitest import multipletests
-import scipy
+from scipy import stats
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import roc_curve, auc
 from math import log10
 import pandas as pd
+from joblib import Parallel, delayed
+import multiprocessing as mp
 
 # Cell
 
@@ -27,7 +29,7 @@ def lognorm(reads):
     returns: numpy or pandas array
     """
     reads_per_million = (reads/reads.sum())*(10**6)
-    lognormed_reads = np.log2(reads_per_million + 1)
+    lognormed_reads = np.log2(reads_per_million.astype(float) + 1)
     return lognormed_reads
 
 
@@ -347,26 +349,37 @@ def aggregate_gene_lfcs(lfcs, gene_col, condition_col='condition', average_cols=
         agg_lfcs[col] = agg_lfcs[col]/np.sqrt(agg_lfcs['n_guides'])
         agg_lfcs[col + '_p_value'] = (agg_lfcs.groupby(condition_col)
                                       [col]
-                                      .transform(lambda x: scipy.stats.norm.sf(abs(x))*2))
+                                      .transform(lambda x: stats.norm.sf(abs(x))*2))
         agg_lfcs[col + '_fdr'] = (agg_lfcs.groupby(condition_col)
                                   [col + '_p_value']
                                   .transform(lambda x: multipletests(x, method='fdr_bh')[1]))
     return agg_lfcs
 
-def get_hypergeometric_pval(df, total_guides):
+def get_hypergeometric_pval(df, name):
     """Calculates the p-value for a gene using the hypergeometric test
 
     df: dataframe, scores with annotations per gene
-    total_guides: int, Total number of guides in the library
     returns: str of ascending constuct ranks, str of descending construct ranks and -log10(avg. p-value) for gene
     """
     n_guides = len(df)
+    total_guides = df['total_guides'].values[0]
     asc_ranks = ';'.join([str(int(x)) for x in df.sort_values('ascending_ranks', ascending=True)['ascending_ranks']])
     desc_ranks = ';'.join([str(int(x)) for x in df.sort_values('descending_ranks', ascending=True)['descending_ranks']])
-    asc_avg_pval = np.mean([-log10(scipy.stats.hypergeom.pmf(r['within-gene asc ranks'], total_guides, n_guides, r['ascending_ranks'])) for i,r in df.iterrows()])
-    desc_avg_pval = np.mean([-log10(scipy.stats.hypergeom.pmf(r['within-gene desc ranks'], total_guides, n_guides, r['descending_ranks'])) for i,r in df.iterrows()])
+    asc_avg_pval = np.mean([-log10(stats.hypergeom.pmf(r['within-gene asc ranks'], total_guides, n_guides, r['ascending_ranks'])) for i,r in df.iterrows()])
+    desc_avg_pval = np.mean([-log10(stats.hypergeom.pmf(r['within-gene desc ranks'], total_guides, n_guides, r['descending_ranks'])) for i,r in df.iterrows()])
     best_pval = max(asc_avg_pval, desc_avg_pval)
-    return asc_ranks, desc_ranks, best_pval
+    return (name[0], name[1], asc_ranks, desc_ranks, best_pval)
+
+def apply_parallel(df, func):
+    """
+    Parallelizes calculation of hypergeometric p-values
+
+    df: dataframe, df grouped by condition, gene symbol
+    func: name of function to call
+    return: tuple, str of ascending constuct ranks, str of descending construct ranks and -log10(avg. p-value) for gene
+    """
+    ret_list = Parallel(n_jobs=mp.cpu_count())(delayed(func)(group, name) for name, group in df)
+    return ret_list
 
 def aggregate_gene_lfcs_hypergeometric(lfcs, gene_col, condition_col='condition', average_cols=None):
     """
@@ -390,10 +403,9 @@ def aggregate_gene_lfcs_hypergeometric(lfcs, gene_col, condition_col='condition'
         lfcs['descending_ranks'] = lfcs.groupby(condition_col)[col].rank(method='first', ascending=False)
         lfcs['within-gene asc ranks'] = (lfcs.groupby([condition_col,gene_col])[col].rank(method='first', ascending=True))
         lfcs['within-gene desc ranks'] = (lfcs.groupby([condition_col,gene_col])[col].rank(method='first', ascending=False))
-        total_guides = np.max(lfcs['ascending_ranks'])
-        col_hyp_pval = pd.DataFrame(lfcs.groupby([condition_col,gene_col]).apply(get_hypergeometric_pval, total_guides = total_guides)).reset_index()
-        col_hyp_pval[[col+'_ascending_construct_ranks',col+'_descending_construct_ranks',col+'_hypergeometric_test_avg_pval']] = pd.DataFrame(col_hyp_pval[0].to_list(), index=col_hyp_pval.index)
-        col_hyp_pval = col_hyp_pval.drop(columns=[0])
+        lfcs['total_guides'] = np.max(lfcs['ascending_ranks'])
+        col_hyp_pval = pd.DataFrame(apply_parallel(lfcs.groupby([condition_col, gene_col]), get_hypergeometric_pval))
+        col_hyp_pval.columns = [condition_col, gene_col, col+'_ascending_construct_ranks',col+'_descending_construct_ranks',col+'_hypergeometric_test_avg_pval']
         agg_lfcs = pd.merge(agg_lfcs, col_hyp_pval, on=[condition_col, gene_col])
     return agg_lfcs
 
